@@ -1,0 +1,1 @@
+Read AGENTS.md, project.json, and management/STATUS.md at the project root before working. Use ai_records/ for task recovery. AGENTS.md is the single source of project rules. Do not infer that a synthetic demo validates any empirical result.

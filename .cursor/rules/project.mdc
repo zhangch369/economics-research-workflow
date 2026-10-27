@@ -1,0 +1,5 @@
+---
+description: Economics research project entry
+alwaysApply: true
+---
+Read root AGENTS.md, project.json, and management/STATUS.md before working. Follow AGENTS.md as the single source of rules. Use ai_records/ for recovery and config/tasks.json for registered execution tasks.

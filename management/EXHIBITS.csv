@@ -1,0 +1,2 @@
+exhibit,spec_id,code,input,run_id,estimate,actual_sample,output,status
+demo_table,DEMO_01,code/03_regressions/01_main.do,data_analysis/<data_version>/analysis.dta,<run_id>,estimates/demo.ster,samples/demo_sample.dta,tables/demo.txt,synthetic_demo

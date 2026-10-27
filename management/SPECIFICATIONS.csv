@@ -1,0 +1,2 @@
+spec_id,tier,unit,treatment,control_group,outcome,exposure,timing,sample,transform_order,fixed_effects,cluster,identification_limit,code,exhibit
+DEMO_01,synthetic_demo,firm-year,not applicable,not applicable,y,x,same year,392 of 400 synthetic rows,no transformations,firm and year,firm,no causal identification,code/03_regressions/01_main.do,demo table

@@ -1,0 +1,10 @@
+{
+  "scope": "synthetic_demo_only",
+  "tasks": [
+    "demo"
+  ],
+  "raw_files": [
+    "demo/v1/firm_year.csv"
+  ],
+  "analysis_versions": []
+}

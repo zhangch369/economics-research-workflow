@@ -1,0 +1,9 @@
+{
+  "enabled": false,
+  "server_id": null,
+  "server_root": null,
+  "last_remote_manifest": "management/server_sync/last_recorded_remote_manifest.json",
+  "approval_required": true,
+  "sync_paths": ["code", "run.py", "export_replication.py", "server_sync.py", "config/tasks.json"],
+  "required_root_dirs": ["code", "config", "data_raw", "data_intermeidate", "data_analysis", "management", "research_notes", "writing", "ai_records"]
+}

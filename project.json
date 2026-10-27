@@ -1,0 +1,126 @@
+{
+  "schema_version": 3,
+  "project_id": "economics_project_template",
+  "purpose": "经济学科研工作流模板；仅合成示例已接入",
+  "entrypoints": {
+    "human": "README.md",
+    "agent": "AGENTS.md",
+    "status": "management/STATUS.md",
+    "workflow": "management/WORKFLOW.md",
+    "tasks": "config/tasks.json",
+    "data_registry": "management/DATA_REGISTRY.csv",
+    "specifications": "management/SPECIFICATIONS.csv",
+    "exhibits": "management/EXHIBITS.csv",
+    "ai_records": "ai_records/INDEX.csv",
+    "writing": "writing/README.md",
+    "cleanup": "management/CLEANUP.csv",
+    "research_notes": "research_notes/README.md",
+    "public_readme": "management/PUBLIC_REPLICATION_README.md",
+    "server_sync": "management/SERVER_SYNC.md",
+    "new_project": "management/NEW_PROJECT.md",
+    "agent_workflow": "management/AGENT_WORKFLOW.md",
+    "task_template": "management/templates/TASK.md",
+    "review_template": "management/templates/REVIEW.md",
+    "claims": "management/CLAIMS.csv",
+    "automation_roadmap": "management/AUTOMATION_ROADMAP.md",
+    "output_layout": "management/OUTPUT_LAYOUT.md"
+  },
+  "execution": {
+    "python_minimum": "3.9",
+    "stata_version": "18",
+    "smoke_command": "python3 run.py --task demo",
+    "machine_config": "config/machine.local.json",
+    "formal_task_enabled": false,
+    "public_export_command": "python3 export_replication.py",
+    "server_sync_plan": "python3 server_sync.py plan"
+  },
+  "reproducibility": {
+    "current_formal_release": null,
+    "scope": "synthetic_demo_only",
+    "server_verified": false,
+    "dependency_lock": "not frozen; actual versions recorded in each Stata log",
+    "template_validation": {
+      "status": "NOT_RUN",
+      "scope": "public sanitized snapshot",
+      "real_server_connected": false
+    }
+  },
+  "storage": {
+    "git_root": ".",
+    "project_root": ".",
+    "data_raw": "data_raw",
+    "data_intermediate": "data_intermeidate",
+    "data_analysis": "data_analysis",
+    "git_ignored_data": [
+      "data_raw",
+      "data_intermeidate"
+    ],
+    "git_tracked_data": [
+      "data_analysis"
+    ],
+    "outputs": "outputs/<task>__<run_id>",
+    "internal_qa": "code/90_qa",
+    "management": "management",
+    "research_notes": "research_notes",
+    "writing": "writing",
+    "output_categories": {
+      "logs": "runtime/startup/console/error logs",
+      "tables": "research tables from all languages",
+      "figures": "research figures from all languages",
+      "estimates": "estimation objects",
+      "samples": "actual samples",
+      "qa": "validation artifacts",
+      "provenance": "snapshots/manifests/backups"
+    }
+  },
+  "rules": {
+    "formal_data_preparation": "Stata",
+    "regressions": "explicit reghdfe followed immediately by outreg2",
+    "unknown_is_zero": false,
+    "permission_for_server": "follow project-specific user authorization",
+    "automatic_deletion": false,
+    "qa_distribution": "internal code/90_qa retained in internal Git; excluded from public replication package",
+    "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory."
+  },
+  "structure": {
+    "registered_subprojects": [],
+    "allowed_generated_dirs": [
+      "outputs",
+      "releases",
+      "scratch"
+    ],
+    "forbidden_generated_locations": [
+      "code",
+      "config"
+    ],
+    "expected_code_stages": [
+      "00_setup",
+      "01_clean",
+      "02_analysis_data",
+      "03_regressions",
+      "04_robustness",
+      "90_qa"
+    ],
+    "project_wrapper_allowed": false
+  },
+  "server_collaboration": {
+    "enabled_by_default": false,
+    "private_config": "config/server.local.json",
+    "same_root_layout_required": true,
+    "approval_required_before_remote_changes": true,
+    "offline_plan_command": "python3 server_sync.py plan",
+    "log": "management/SERVER_SYNC_LOG.csv"
+  },
+  "collaboration": {
+    "delegation": "on_demand_within_user_authorized_task",
+    "default_max_worker_agents": 2,
+    "single_writer_per_mutable_file": true,
+    "review_max_revision_rounds": 2,
+    "production_read_only_reviewer": true,
+    "shared_registry_writer": "coordinator",
+    "automatic_scheduler_implemented": false,
+    "cache_implemented": false,
+    "automatic_dashboard_implemented": false,
+    "atomic_task_lock_implemented": false
+  }
+}

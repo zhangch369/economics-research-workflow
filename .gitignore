@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.pyc
+.env
+*.env
+/data_raw/*
+!/data_raw/demo/
+/data_intermeidate/
+/config/machine.local.json
+/config/server.local.json
+/outputs/
+/releases/
+/scratch/
+# data_analysis/ 与 code/90_qa/ 随内部项目纳入 Git。
+# 对外复现包另由导出器排除内部 QA、聊天、笔记和私有配置。

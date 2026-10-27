@@ -1,0 +1,7 @@
+{
+  "stata_bin": "/Applications/Stata 18/StataMP.app/Contents/MacOS/stata-mp",
+  "batch_flag": "-e",
+  "data_raw_root": "data_raw",
+  "data_intermediate_root": "data_intermeidate",
+  "data_analysis_root": "data_analysis"
+}

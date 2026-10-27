@@ -1,0 +1,4 @@
+dataset_id,layer,relative_path,source,snapshot_id,producer,parents,unit,key,coverage,zero_missing_rule,share_rule,status
+demo_raw,raw,data_raw/demo/v1/firm_year.csv,synthetic fixture,v1,fixture creation,none,firm-year,firm_id+year,2018-2022,unknown remains missing,synthetic only,ready
+demo_panel,intermediate,data_intermeidate/<data_version>/panel.dta,derived,<data_version>,code/01_clean/01_firm_year_clean.do,demo_raw,firm-year,firm_id+year,2018-2022,unknown remains missing,synthetic only,per-run
+demo_analysis,analysis,data_analysis/<data_version>/analysis.dta,derived,<data_version>,code/02_analysis_data/01_firm_year_analysis.do,demo_panel,firm-year,firm_id+year,2018-2022,exclude 8 unknown outcomes and retain audit,synthetic only,per-run

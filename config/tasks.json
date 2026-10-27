@@ -1,0 +1,53 @@
+{
+  "demo": {
+    "enabled": true,
+    "scope": "synthetic_demo_only",
+    "entry": "00_run_demo.do",
+    "inputs": [
+      {
+        "area": "raw",
+        "path": "demo/v1/firm_year.csv"
+      }
+    ],
+    "expected": [
+      {
+        "area": "intermediate",
+        "path": "panel.dta"
+      },
+      {
+        "area": "analysis",
+        "path": "analysis.dta"
+      },
+      {
+        "area": "output",
+        "path": "tables/demo.txt"
+      },
+      {
+        "area": "output",
+        "path": "estimates/demo.ster"
+      },
+      {
+        "area": "output",
+        "path": "samples/demo_sample.dta"
+      }
+    ],
+    "qa_entry": "90_qa/00_run_demo_checks.do",
+    "qa_expected": [
+      {
+        "area": "output",
+        "path": "qa/metrics.csv"
+      },
+      {
+        "area": "output",
+        "path": "qa/QA_PASS.txt"
+      }
+    ]
+  },
+  "formal": {
+    "enabled": false,
+    "scope": "REPLACE_WITH_APPROVED_SCOPE",
+    "entry": "00_run_formal.do",
+    "inputs": [],
+    "expected": []
+  }
+}
