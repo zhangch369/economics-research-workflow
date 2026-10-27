@@ -1,4 +1,8 @@
-# 经济学科研项目模板
+# 经济学科研项目模板 / Empirical Economics Research Workflow
+
+[中文](#中文) | [English](#english)
+
+## 中文
 
 **本目录就是项目根目录和 Git 根目录，所有功能目录直接平级。**
 
@@ -56,3 +60,56 @@
 ## outputs 分类
 
 每次运行内，logs/ 放日志，tables/ 放 outreg2、Stata、Python 研究表格，figures/ 放研究图片。其他分类及示例见 [输出分类](management/OUTPUT_LAYOUT.md)。
+
+## English
+
+This repository is a personal workflow template for empirical economics research. It includes a synthetic demonstration, Stata analysis scripts, project management templates, and optional AI-assisted collaboration guidance. It does not contain private research data, personal chat transcripts, or local machine configurations.
+
+### Getting started
+
+1. Read [AGENTS.md](AGENTS.md), [project.json](project.json), and [project status](management/STATUS.md). For a new project, follow the [startup checklist](management/NEW_PROJECT.md). The detailed documentation and templates are currently in Chinese.
+2. Copy the appropriate example configuration to `config/machine.local.json` and set the path to your Stata executable. For macOS:
+
+   ```bash
+   cp config/machine.mac.example.json config/machine.local.json
+   ```
+
+3. From the project root, run the synthetic demonstration:
+
+   ```bash
+   python3 run.py --task demo
+   ```
+
+The demonstration requires Python 3.9+, Stata 18, and the Stata packages `reghdfe`, `ftools`, and `outreg2`. The launcher does not install dependencies. The expected analysis dataset contains 392 observations for 80 firms. A successful synthetic run does not validate a real research project or its identification strategy.
+
+### Project layout
+
+| Directory | Purpose |
+| --- | --- |
+| `code/` | Numbered Stata production stages; `90_qa/` contains internal checks |
+| `config/` | Task definitions and machine/server configuration examples |
+| `data_raw/`, `data_intermeidate/`, `data_analysis/` | Raw, intermediate, and analysis data; `data_intermeidate` retains the template's existing spelling |
+| `outputs/` | Run-specific logs, tables, figures, estimates, samples, and checks |
+| `management/` | Project status, data and specification registries, task cards, and workflow rules |
+| `research_notes/`, `ai_records/` | Research notes and important AI session handoffs |
+| `writing/`, `releases/` | Manuscripts and presentations; fixed versions and replication packages |
+
+Raw and intermediate data are ignored by Git, apart from the included synthetic fixture; analysis data are tracked when added. Avoid committing confidential data and local configuration. Paths for the three data layers can be set independently in the machine configuration.
+
+### Analysis and outputs
+
+The demo entry point runs setup, cleaning, analysis-data construction, and regression stages in order. Formal data preparation and estimation use Stata. Ordinary regressions are written explicitly and followed immediately by `outreg2`; tables and figures are exported in the relevant analysis scripts.
+
+Each run has its own output directory: logs go to `logs/`, research tables to `tables/`, figures to `figures/`, saved estimates to `estimates/`, actual estimation samples to `samples/`, checks to `qa/`, and code snapshots and input fingerprints to `provenance/`. See the [output layout](management/OUTPUT_LAYOUT.md).
+
+Internal QA is invoked separately by the task configuration and is not required by the production entry point. `python3 export_replication.py` builds a local replication archive that excludes internal QA and records `qa_status=NOT_RUN`; it does not publish or upload the archive.
+
+### AI collaboration and project management
+
+For substantial tasks, use the [task card](management/templates/TASK.md) to record deliverables, inputs, dependencies, file ownership, and acceptance criteria. The [collaboration guide](management/AGENT_WORKFLOW.md) describes optional delegation and read-only evidence-based review. Simple tasks can use a single agent. Key manuscript claims can be linked to specifications, runs, estimates, and samples in `management/CLAIMS.csv` and `management/EXHIBITS.csv`.
+
+Automatic dependency scheduling, caching, task locking, and a status dashboard are **not implemented**; see the [automation roadmap](management/AUTOMATION_ROADMAP.md).
+
+### Server work
+
+Local and server projects use the same directory layout, while absolute paths may differ. Before remote changes, generate a local plan and obtain the project owner's approval for that specific synchronization. `python3 server_sync.py plan` compares local files with a recorded snapshot without connecting to the server. A local change or an old snapshot does not establish the current remote state. See the [server guide](management/SERVER_SYNC.md).
