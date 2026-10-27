@@ -25,6 +25,8 @@
 
 ## 从这里开始
 
+详细步骤：**[新项目使用指南（中英文）](management/USAGE.md)**。
+
 1. 读 [AGENTS.md](AGENTS.md)、[project.json](project.json)、[当前状态](management/STATUS.md)。
 2. 从 config/ 中选择机器配置示例，复制成 machine.local.json，填写 Stata 实际路径。Mac 示例：`cp config/machine.mac.example.json config/machine.local.json`。
 3. 在项目根目录执行 `python3 run.py --task demo`。需要 Stata 18、reghdfe、ftools、outreg2 和 Python 3.9+；启动器不自动安装依赖。合成示例应有392条分析观测、80个企业。
@@ -66,6 +68,8 @@
 This repository is a personal workflow template for empirical economics research. It includes a synthetic demonstration, Stata analysis scripts, project management templates, and optional AI-assisted collaboration guidance. It does not contain private research data, personal chat transcripts, or local machine configurations.
 
 ### Getting started
+
+For a complete walkthrough, see the **[bilingual new-project guide](management/USAGE.md)**.
 
 1. Read [AGENTS.md](AGENTS.md), [project.json](project.json), and [project status](management/STATUS.md). For a new project, follow the [startup checklist](management/NEW_PROJECT.md). The detailed documentation and templates are currently in Chinese.
 2. Copy the appropriate example configuration to `config/machine.local.json` and set the path to your Stata executable. For macOS:
