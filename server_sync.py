@@ -6,7 +6,7 @@ import json
 import platform
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from uuid import uuid4
+from project_layout import RunLayout
 
 ROOT = Path(__file__).resolve().parent
 TZ = timezone(timedelta(hours=8))
@@ -48,10 +48,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["plan", "snapshot"])
     parser.add_argument("--config", default="config/server.local.json")
+    parser.add_argument("--date")
+    parser.add_argument("--edition", type=int)
     args = parser.parse_args()
-    run_id = datetime.now(TZ).strftime("%Y%m%d_%H%M%S") + "_" + uuid4().hex[:8]
-    out = ROOT / "outputs" / f"server_sync_{args.action}__{run_id}"
-    (out / "logs").mkdir(parents=True)
+    layout = RunLayout(ROOT, f"server_sync_{args.action}", "00_setup", args.date, args.edition)
+    manifest_path = layout.provenance / f"server_manifest_{layout.version}.json"
     try:
         config_path = resolve(args.config)
         if not config_path.exists() and args.config == "config/server.local.json":
@@ -60,9 +61,9 @@ def main():
         if config.get("approval_required") is not True:
             raise ValueError("服务器操作必须保留 项目负责人 的审批要求，不能禁用 approval_required。")
         local = snapshot(config)
-        write(out / "manifest.json", local)
+        write(manifest_path, local)
         if args.action == "snapshot":
-            result = {"status": "SNAPSHOT_CREATED", "manifest": str(out / "manifest.json"),
+            result = {"status": "SNAPSHOT_CREATED", "manifest": str(manifest_path),
                       "remote_connection_made": False, "files_transferred": 0}
         elif not config.get("enabled", False):
             result = {"status": "NOT_APPLICABLE", "reason": "本项目尚未启用服务器协作。",
@@ -97,14 +98,17 @@ def main():
                       "remote_missing_root_dirs": remote.get("missing_root_dirs", []) if remote else None,
                       "approval_required_before_remote_actions": True,
                       "remote_connection_made": False, "files_transferred": 0}
-        write(out / "plan.json", result)
-        (out / "STATUS.txt").write_text(result["status"] + "\n")
-        (out / "logs/plan.log").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
-        print(f"{result['status']}\n记录：{out}")
+        result.update({"date": layout.date, "edition": layout.edition, "version": layout.version})
+        write(layout.file("qa", "server_plan", ".json"), result)
+        write(layout.record, result)
+        layout.status_file.write_text(result["status"] + "\n")
+        layout.file("logs", "server_plan", ".log").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+        print(f"{result['status']}\n记录：{layout.record}")
         return 0
     except Exception as error:
-        (out / "STATUS.txt").write_text("FAIL\n")
-        (out / "logs/plan.log").write_text(str(error) + "\n")
+        layout.status_file.write_text("FAIL\n")
+        write(layout.record, {"status": "FAIL", "version": layout.version, "error": str(error)})
+        layout.file("logs", "server_plan_error", ".log").write_text(str(error) + "\n")
         raise
 
 

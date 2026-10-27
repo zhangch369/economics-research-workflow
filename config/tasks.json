@@ -3,51 +3,86 @@
     "enabled": true,
     "scope": "synthetic_demo_only",
     "entry": "00_run_demo.do",
+    "output_module": "02_main_regressions",
     "inputs": [
       {
         "area": "raw",
         "path": "demo/v1/firm_year.csv"
       }
     ],
-    "expected": [
-      {
+    "artifacts": {
+      "PANEL_FILE": {
         "area": "intermediate",
-        "path": "panel.dta"
+        "module": "01_data_preparation/01_clean",
+        "stem": "firm_year_panel",
+        "suffix": ".dta"
       },
-      {
+      "ANALYSIS_FILE": {
         "area": "analysis",
-        "path": "analysis.dta"
+        "module": "01_data_preparation/02_build",
+        "stem": "firm_year_analysis",
+        "suffix": ".dta"
       },
-      {
-        "area": "output",
-        "path": "tables/demo.txt"
+      "MAIN_TABLE": {
+        "area": "tables",
+        "module": "02_main_regressions",
+        "stem": "main_table",
+        "suffix": ".txt"
       },
-      {
-        "area": "output",
-        "path": "estimates/demo.ster"
+      "MAIN_FIGURE": {
+        "area": "figures",
+        "module": "02_main_regressions",
+        "stem": "main_figure",
+        "suffix": ".pdf"
       },
-      {
-        "area": "output",
-        "path": "samples/demo_sample.dta"
+      "MAIN_ESTIMATE": {
+        "area": "estimates",
+        "module": "02_main_regressions",
+        "stem": "main_estimate",
+        "suffix": ".ster"
+      },
+      "MAIN_SAMPLE": {
+        "area": "samples",
+        "module": "02_main_regressions",
+        "stem": "main_sample",
+        "suffix": ".dta"
       }
+    },
+    "expected": [
+      "PANEL_FILE",
+      "ANALYSIS_FILE",
+      "MAIN_TABLE",
+      "MAIN_FIGURE",
+      "MAIN_ESTIMATE",
+      "MAIN_SAMPLE"
     ],
     "qa_entry": "90_qa/00_run_demo_checks.do",
-    "qa_expected": [
-      {
-        "area": "output",
-        "path": "qa/metrics.csv"
+    "qa_artifacts": {
+      "QA_METRICS": {
+        "area": "qa",
+        "module": "90_qa",
+        "stem": "metrics",
+        "suffix": ".csv"
       },
-      {
-        "area": "output",
-        "path": "qa/QA_PASS.txt"
+      "QA_PASS": {
+        "area": "qa",
+        "module": "90_qa",
+        "stem": "qa_pass",
+        "suffix": ".txt"
       }
+    },
+    "qa_expected": [
+      "QA_METRICS",
+      "QA_PASS"
     ]
   },
   "formal": {
     "enabled": false,
     "scope": "REPLACE_WITH_APPROVED_SCOPE",
     "entry": "00_run_formal.do",
+    "output_module": "00_setup",
     "inputs": [],
+    "artifacts": {},
     "expected": []
   }
 }

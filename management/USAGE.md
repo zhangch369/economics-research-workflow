@@ -37,9 +37,9 @@ cp config/machine.mac.example.json config/machine.local.json
 python3 run.py --task demo
 ```
 
-运行结束后，打开终端显示的 `outputs/demo__<运行编号>/`。检查 `STATUS.txt`、`logs/` 和 `qa/`；成功的内部演示应显示 `PASS`，分析数据包含 392 条观测、80 家企业。
+运行结束后，打开终端显示的 `outputs/runs/demo/run_YYYYMMDD_vNN.json`。从记录中的artifacts查看表格、图形、样本和QA；日志位于 `outputs/logs/02_main_regressions/`。成功的内部演示应显示 `PASS`，分析数据包含 392 条观测、80 家企业。
 
-如果失败，先打开本次 `logs/` 下的日志，检查 Stata 路径和扩展包。**合成示例通过只说明示例流程可运行，不代表真实项目已经复现或因果识别成立。**
+如果失败，先打开`outputs/logs/` 对应模块下的日志，检查 Stata 路径和扩展包。**合成示例通过只说明示例流程可运行，不代表真实项目已经复现或因果识别成立。**
 
 ### 4. 登记自己的研究任务
 
@@ -52,9 +52,9 @@ python3 run.py --task demo
 
 ### 5. 接入正式 Stata 流程
 
-1. 在 `code/01_clean/`、`code/02_analysis_data/`、`code/03_regressions/` 等目录编写自己的 do-file，按阶段保存中间与分析数据。普通回归逐列显式写出，并紧接 `outreg2` 输出。
+1. 在 `code/01_data_preparation/01_clean/`、`code/01_data_preparation/02_build/`、`code/02_main_regressions/` 等目录编写自己的 do-file，按阶段保存中间与分析数据。普通回归逐列显式写出，并紧接 `outreg2` 输出。
 2. 修改 `code/00_run_formal.do`，替换当前的占位报错，明确列出已审核的阶段执行顺序。默认占位文件会主动报错，不能直接作为正式入口。
-3. 在 `config/tasks.json` 的 `formal` 项填写经确认的 `scope`、`entry`、`inputs` 和 `expected`；需要内部 QA 时设置 `qa_entry` 与 `qa_expected`。`entry` 和 QA 入口是相对于 `code/` 的路径，数据与产物则用配置中的 `area` 和相对路径登记。确认输入、产物和验收条件后，再把 `enabled` 改为 `true`。
+3. 在 `config/tasks.json` 的 `formal` 项填写经确认的 `scope`、`entry`、`output_module`、`inputs`、`artifacts` 和 `expected`；需要内部 QA 时设置 `qa_entry`、`qa_artifacts` 与 `qa_expected`。`entry` 和 QA 入口是相对于 `code/` 的路径，输入用 `area/path` 登记，产物用 `area/module/stem/suffix` 指定用途、对应代码模块、文件主体与扩展名；expected列出产物宏名。确认输入、产物和验收条件后，再把 `enabled` 改为 `true`。
 4. 从项目根目录执行 `python3 run.py --task formal`，再核对本次运行的日志、实际样本、估计与 QA。
 
 实际路径和项目示例可参考 `demo` 任务及对应 do-file。不要把示例数据的运行结果当作自己的正式结果。
@@ -98,7 +98,7 @@ Edit `config/machine.local.json` to point to your Stata executable and, if neede
 python3 run.py --task demo
 ```
 
-Open the `outputs/demo__<run_id>/` directory printed by the launcher and inspect `STATUS.txt`, `logs/`, and `qa/`. A successful internal demo reports `PASS`; its analysis dataset has 392 observations and 80 firms. If it fails, inspect the logs and check the Stata path and packages. Passing the synthetic demo does not validate a real project or its identification strategy.
+Open the `outputs/runs/demo/run_YYYYMMDD_vNN.json` file printed by the launcher and use its artifact paths. Logs are under `outputs/logs/<module>/`; tables, figures, estimates, samples, and checks have their own top-level type directories. A successful internal demo reports `PASS`; its analysis dataset has 392 observations and 80 firms. If it fails, inspect the logs and check the Stata path and packages. Passing the synthetic demo does not validate a real project or its identification strategy.
 
 ### 4. Register the project
 
@@ -111,10 +111,16 @@ The bundled `data_raw/demo/` is a synthetic exception to the raw-data ignore rul
 
 ### 5. Configure the formal Stata pipeline
 
-Write project do-files in the numbered `code/` stages, saving intermediate and analysis datasets. Replace the deliberate placeholder error in `code/00_run_formal.do` with the reviewed stage order. In `config/tasks.json`, fill the `formal` task's `scope`, `entry`, `inputs`, and `expected`; configure `qa_entry` and `qa_expected` when applicable. The `entry` paths are relative to `code/`; input and output paths use the configured `area` and relative path. Enable the task only after defining the inputs and acceptance criteria.
+Write project do-files in the numbered `code/` stages, saving intermediate and analysis datasets. Replace the deliberate placeholder error in `code/00_run_formal.do` with the reviewed stage order. In `config/tasks.json`, fill the `formal` task's `scope`, `entry`, `output_module`, `inputs`, `artifacts`, and `expected`; configure `qa_entry`, `qa_artifacts`, and `qa_expected` when applicable. The `entry` paths are relative to `code/`; inputs use `area/path`, while artifacts use `area/module/stem/suffix`; `expected` lists artifact macro names. Enable the task only after defining the inputs and acceptance criteria.
 
 Then run `python3 run.py --task formal` and inspect the logs, actual estimation samples, estimates, and QA. Use the demo task as a structural example, not as a formal result.
 
 ### 6. Use AI assistance and maintain progress
 
 Fill in [the new-project prompt](../ai_records/NEW_PROJECT.txt) and give it to an agent that can read the project files. The [collaboration guide](AGENT_WORKFLOW.md) describes optional delegation, file ownership, and read-only review; platform support varies. Update project status from actual evidence and record important decisions and handoffs. Link key manuscript claims to exhibits, specifications, runs, estimates, and samples in the existing registries.
+
+## 日期版次与目录 / Dates, editions, and directories
+
+数据目录逐级镜像code；outputs先按tables/figures/logs等分类，再按模块。输出文件名直接带YYYYMMDD_vNN，无随机后缀目录。包内已有分析v01时，第一次运行会自动选用v02，保留已附带的分析文件。不要强制覆盖已有版次。
+
+Intermediate and analysis directories mirror `code/` recursively. Output filenames carry `YYYYMMDD_vNN` under type-first output directories. If an analysis edition is already bundled, the next run selects an unused edition. Exported replication archives exclude internal QA; the workflow template itself retains the internal QA examples.

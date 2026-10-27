@@ -1,5 +1,5 @@
 version 18.0
-use "$INTERMEDIATE/panel.dta", clear
+use "$PANEL_FILE", clear
 isid firm_id year
 assert _N == 400
 assert inrange(year, 2018, 2022)

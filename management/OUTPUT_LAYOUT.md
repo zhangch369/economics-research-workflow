@@ -1,25 +1,35 @@
-# 输出分类规则
+# 输出分类与日期版次命名（当前有效）
 
-所有语言按文件用途分类，先按任务和运行编号归档。Stata、outreg2、Python 共用以下布局：
+先按用途，再按code的模块查找；日期和版次写在输出文件名上。不再以时间或随机后缀运行文件夹作为outputs的主要分类。
 
 ```text
-outputs/<任务>__<运行编号>/
-├── run.json、STATUS.txt 等  运行元信息与状态
-├── logs/                   启动、执行、控制台与错误日志
-├── tables/                 回归表、描述统计等研究表格
-├── figures/                研究图形及可编辑图形文件
-├── estimates/              .ster 等估计对象
-├── samples/                实际估计样本键和 e(sample)
-├── qa/                     检查报告、指标、诊断图表
-└── provenance/             代码配置快照、指纹、变更清单和修改前备份
+outputs/
+├── tables/02_main_regressions/main_table_demo_20261027_v01.txt
+├── figures/02_main_regressions/main_figure_demo_20261027_v01.pdf
+├── logs/02_main_regressions/analysis_demo_20261027_v01.log
+├── estimates/02_main_regressions/main_estimate_demo_20261027_v01.ster
+├── samples/02_main_regressions/main_sample_demo_20261027_v01.dta
+├── qa/90_qa/metrics_demo_20261027_v01.csv
+├── provenance/02_main_regressions/demo_20261027_v01/   该版的源文件和配置快照
+└── runs/demo/run_20261027_v01.json                    状态和所有产物准确路径
 ```
 
-日志与研究图表必须分开，禁止图表落入 logs 或运行根目录。按用途而非扩展名分类：outreg2 的 .txt 属于 tables，控制台 .txt 属于 logs，检查指标 .csv 属于 qa。QA 图表可放 qa/tables、qa/figures，QA 执行日志仍在 logs。
+## 文件与版次
 
-Stata 启动工作目录仍设为本次 logs，所有导出必须显式指定路径。回归后立即 outreg2 using "$OUT/tables/table1.txt"；绘图后 graph export "$OUT/figures/figure1.pdf"，graph save 的 .gph 也放 figures。路径为示例，不是独立运行脚本。
+文件名使用“用途_任务_YYYYMMDD_vNN.扩展名”，例如main_table_demo_20261027_v01.txt。v01就是第1版，v02为第2版；不使用随机串、UUID或哈希作为版本名。哈希仅在指纹记录内验证内容，不承担目录分类或版本命名。来源原件、代码/配置源文件保留原名；provenance中代码快照保留原相对文件名，外层明确所属日期和版次，便于原样恢复。
 
-Python 输出研究表时使用 out / "tables" / "summary.csv"，savefig 使用 out / "figures" / "figure1.png"，logging 和 stdout/stderr 保存到 logs；创建所需目录后再导出。Python 不替代正式 Stata 面板整理。
+run.py、export_replication.py和server_sync.py默认使用北京时间当天日期，同一任务同日自动递增版次。可用--date YYYYMMDD --edition N明确指定；已经使用的版次拒绝覆盖。版次保留记录独占创建只解决版次重复，不等于跨聊天任务锁、缓存或依赖调度。
 
-清洗、中间和分析数据继续放既定三层数据目录；论文/汇报源稿和正式成品放 writing。辅助打包/同步任务按需建立分类目录，特殊产物使用明确用途名称，不建立含混的杂物目录。
+## 所有语言共用
 
-验收：实际输出、config/tasks.json 中 expected、EXHIBITS 与写作引用路径一致；日志与研究表图分离。现有 run.py 已创建上述分类，示例 outreg2 已指向 tables；本次新增跨语言明确规则，不声称实现了自动路径拦截。
+按用途分类，不按扩展名分类：outreg2生成的.txt属于tables；控制台.txt/.log属于logs；QA指标.csv和诊断图属于qa。Stata启动进程的工作目录设为对应模块logs，包装do-file本身也带日期和版次，所以Stata自动日志沿用可读名称。
+
+图表导出语句仍在对应分析代码中。使用启动器提供的明确产物宏，例如outreg2 using "$MAIN_TABLE"、graph export "$MAIN_FIGURE"；不能再假定$OUT下面有某个随机运行文件夹。$OUT现在指向outputs根目录。Python同样从project_layout.RunLayout或已登记的产物路径取得tables/figures/logs位置，不把研究图表写入日志目录。
+
+## 数据与清理
+
+数据分类见DATA_LAYOUT.md：data_intermeidate和data_analysis逐级镜像code，不按运行时间建目录。每个数据文件同样带日期和版次。
+
+每次任务结束与每周检查：列出确认无用的临时txt、废弃输出、未被保留版本引用的重复产物，写明具体路径、理由、可回收空间（有实测时）和是否已经获准删除。根据内容区分正式表格txt与临时txt；正式表图、有效日志、实际样本与复现来源不能仅因扩展名或旧日期被清理。已确认不需要的具体文件按用户授权清理，并保留清单；尚未确认的候选先提醒。
+
+验收：runs记录、config/tasks.json产物字典、EXHIBITS及写作引用与真实文件一致；所有生成文件可读、带日期版次；不再生成随机后缀文件夹。

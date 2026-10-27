@@ -1,67 +1,52 @@
-# 经济学科研项目模板 / Empirical Economics Research Workflow
+# 经济学科研工作流 / Empirical Economics Research Workflow
 
 [中文](#中文) | [English](#english)
 
 ## 中文
 
-**本目录就是项目根目录和 Git 根目录，所有功能目录直接平级。**
+详细启动步骤：[中英文使用指南](management/USAGE.md)。
+
+
+项目采用扁平布局。代码按论文部分组织，数据仅为合成演示。
 
 ```text
 项目根目录/
-├── code/                         生产代码按运行顺序分类；90_qa 为内部检查
-├── config/                       任务、机器和服务器配置
-├── data_raw/                     原始数据，不入 Git
-├── data_intermeidate/             中间数据，不入 Git，沿用用户指定拼写
-├── data_analysis/                清洗好的回归数据，纳入 Git
-├── outputs/                      每次运行的日志、估计、样本和表图
-├── management/                   状态、数据/规格登记、决策与复现说明
-├── research_notes/               AI 整理的 Markdown 思考报告
-├── ai_records/                   核心聊天与恢复卡
-├── writing/                      Word、LaTeX、Beamer、PPT 正式稿
-└── releases/                     固定版本与对外复现包
+├── code/                    00_setup；01_data_preparation；02_main_regressions；03_robustness；04_mechanisms；05_extensions；90_qa
+├── data_raw/                来源原件，不入Git
+├── data_intermeidate/       目录逐级镜像code，不入Git
+├── data_analysis/           目录逐级镜像code，纳入Git
+├── outputs/                 tables、figures、logs、estimates、samples、qa、provenance、runs
+├── config/                  任务、机器与服务器配置
+├── management/              管理说明、状态、登记与决策
+├── research_notes/          AI思考报告
+├── ai_records/              核心聊天与恢复卡
+├── writing/                 Word、LaTeX、Beamer、PPT正式稿
+└── releases/                日期与版次命名的对外复现包
 ```
 
-本仓库为个人使用的实证研究工作流模板，提供合成数据演示。正式研究数据、私人聊天和本机配置不包含在仓库中。
+## 先运行示例
 
-## 从这里开始
+1. 读AGENTS.md、project.json、management/STATUS.md；从config选择机器配置，复制为machine.local.json并填写Stata路径。
+2. 在根目录执行`python3 run.py --task demo`。需要Stata18、reghdfe、ftools、outreg2及Python3.9+。所有正式清洗、分析数据构造和回归仍由Stata执行。
+3. 查看终端给出的`outputs/runs/demo/run_YYYYMMDD_vNN.json`，按其中artifacts准确路径打开表图、估计和实际样本。合成示例有392条分析记录、80个企业，不是任何真实论文结果。
 
-详细步骤：**[新项目使用指南（中英文）](management/USAGE.md)**。
+## 找数据、结果与版次
 
-1. 读 [AGENTS.md](AGENTS.md)、[project.json](project.json)、[当前状态](management/STATUS.md)。
-2. 从 config/ 中选择机器配置示例，复制成 machine.local.json，填写 Stata 实际路径。Mac 示例：`cp config/machine.mac.example.json config/machine.local.json`。
-3. 在项目根目录执行 `python3 run.py --task demo`。需要 Stata 18、reghdfe、ftools、outreg2 和 Python 3.9+；启动器不自动安装依赖。合成示例应有392条分析观测、80个企业。
+数据目录逐级对应实际code目录，新增专题/研究线要一起镜像；同一数据由生产代码所在模块归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
 
-机器配置默认使用根目录内 data_raw、data_intermeidate、data_analysis。原始和中间数据可按需要放到挂载盘；要纳入当前 Git 的分析数据需位于本仓库内。搬迁时保留相同相对布局，按任务传输数据版本。
+示例：`data_intermeidate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta`。
 
-## 代码分类
+outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.txt`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 
-生产入口 code/00_run_demo.do 按顺序调用 00_setup、01_clean、02_analysis_data、03_regressions。稳健性放 04_robustness。图表导出语句直接写在对应分析代码中：回归后立即 outreg2，绘图后立即 graph export；生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。阶段内文件也编号并标明数据类型与用途，例如 01_clean/01_firm_year_clean.do。清洗、估计、QA 分文件。
+图表语句放在对应分析代码中，回归后立即outreg2、绘图后立即graph export。当前示例产物路径由tasks.json统一登记并通过宏传给Stata。内部QA留code/90_qa，生产入口独立；公开包用`python3 export_replication.py`导出，移除内部QA和其任务调用。规则见[OUTPUT_LAYOUT](management/OUTPUT_LAYOUT.md)。
 
-内部 QA 留在 code/90_qa/，由任务配置单独调用，不被生产入口依赖。内部运行通过时记录 qa_status=PASS；对外包用 `python3 export_replication.py` 导出，排除内部 QA 并移除其任务调用，记录 qa_status=NOT_RUN。公开导出不等于自动上传或发布。
+## 服务器与维护
 
-## 涉及服务器时必须遵守
+本机与服务器使用相同扁平目录设计。相关代码变更后先运行`python3 server_sync.py plan`列离线差异，获得项目负责人对本次同步的同意后才连接/同步；远端核验后登记完成。该工具不建立网络连接。详见[SERVER_SYNC](management/SERVER_SYNC.md)。
 
-本机和服务器使用**同一根目录设计**，code、config、三层数据、输出与文档目录直接平级；两台机器的绝对根路径、Stata 路径可以不同。
+每次任务结束和每周检查：提醒清理确认无用的临时txt、废弃输出和无保留依赖的重复文件，列具体路径和可删依据。正式表格txt、有效日志和复现依赖按用途识别；不因扩展名直接删除。禁止新生成随机后缀文件夹。
 
-**本机相关代码有变更 → 生成差异 → 项目负责人 同意 → 同步服务器 → 远端验证 → 记录版本。** 没有本次同意，agent 不得自动连接、上传或修改服务器。同步代码的同意不自动扩大为重跑回归或重建数据。
-
-有服务器任务时，按 [服务器协作说明](management/SERVER_SYNC.md) 登记 server.local.json。执行 `python3 server_sync.py plan` 只在本机比较代码和已记录快照，列出待同步项；它不连接服务器。未取得远端快照时明确记为未核实；不能把“本机改好了”写成“服务器已同步”。实际完成后保留远端代码指纹、目录核对和授权记录。
-
-无服务器任务时保持 enabled=false。具体项目原有的服务器授权限制继续适用。
-
-管理细则见 [工作流规范](management/WORKFLOW.md)。简易思考报告放 research_notes/，正式论文与汇报放 writing/，核心聊天放 ai_records/。不要另建未登记的完整子项目副本。
-
-## 新项目与多 agent 协作
-
-新项目从 [启动清单](management/NEW_PROJECT.md) 开始，也可复制 [首次启动提示词](ai_records/NEW_PROJECT.txt)。较大任务用 [任务卡](management/templates/TASK.md) 定义交付物和文件所有权；按 [协作规范](management/AGENT_WORKFLOW.md) 调用执行者与只读审查者。简单任务保持单 agent。
-
-关键论文结论登记在 management/CLAIMS.csv，并关联既有 EXHIBITS.csv。任务状态由协调者依据实际证据维护。[自动化路线图](management/AUTOMATION_ROADMAP.md) 明确已提供与未实现能力；当前不提供自动缓存、依赖调度或状态面板。
-
-新项目应检查版本控制与忽略规则。合成示例验证不代表真实项目验收。
-
-## outputs 分类
-
-每次运行内，logs/ 放日志，tables/ 放 outreg2、Stata、Python 研究表格，figures/ 放研究图片。其他分类及示例见 [输出分类](management/OUTPUT_LAYOUT.md)。
+管理说明在management，思考报告在research_notes，正式稿在writing，核心对话在ai_records。新项目从[NEW_PROJECT](management/NEW_PROJECT.md)启动；当前正式任务仍未接入，不能将模板历史PASS当成研究成果。
 
 ## English
 
@@ -93,7 +78,7 @@ The demonstration requires Python 3.9+, Stata 18, and the Stata packages `reghdf
 | `code/` | Numbered Stata production stages; `90_qa/` contains internal checks |
 | `config/` | Task definitions and machine/server configuration examples |
 | `data_raw/`, `data_intermeidate/`, `data_analysis/` | Raw, intermediate, and analysis data; `data_intermeidate` retains the template's existing spelling |
-| `outputs/` | Run-specific logs, tables, figures, estimates, samples, and checks |
+| `outputs/` | Type-first tables, figures, logs, estimates, samples, checks, provenance, and readable run records |
 | `management/` | Project status, data and specification registries, task cards, and workflow rules |
 | `research_notes/`, `ai_records/` | Research notes and important AI session handoffs |
 | `writing/`, `releases/` | Manuscripts and presentations; fixed versions and replication packages |
@@ -104,7 +89,7 @@ Raw and intermediate data are ignored by Git, apart from the included synthetic 
 
 The demo entry point runs setup, cleaning, analysis-data construction, and regression stages in order. Formal data preparation and estimation use Stata. Ordinary regressions are written explicitly and followed immediately by `outreg2`; tables and figures are exported in the relevant analysis scripts.
 
-Each run has its own output directory: logs go to `logs/`, research tables to `tables/`, figures to `figures/`, saved estimates to `estimates/`, actual estimation samples to `samples/`, checks to `qa/`, and code snapshots and input fingerprints to `provenance/`. See the [output layout](management/OUTPUT_LAYOUT.md).
+Outputs are organized by type first: `outputs/tables/`, `figures/`, `logs/`, `estimates/`, `samples/`, `qa/`, `provenance/`, and `runs/`, followed by the code module. Generated filenames contain a date and edition such as `main_table_demo_20261027_v01.txt`; no random-suffix version directories are created. Intermediate and analysis directories mirror the complete relative directory tree under `code/`. Repeated runs advance the edition and refuse overwrites, including when the clone already contains a versioned analysis file. See the [output layout](management/OUTPUT_LAYOUT.md).
 
 Internal QA is invoked separately by the task configuration and is not required by the production entry point. `python3 export_replication.py` builds a local replication archive that excludes internal QA and records `qa_status=NOT_RUN`; it does not publish or upload the archive.
 
@@ -117,3 +102,9 @@ Automatic dependency scheduling, caching, task locking, and a status dashboard a
 ### Server work
 
 Local and server projects use the same directory layout, while absolute paths may differ. Before remote changes, generate a local plan and obtain the project owner's approval for that specific synchronization. `python3 server_sync.py plan` compares local files with a recorded snapshot without connecting to the server. A local change or an old snapshot does not establish the current remote state. See the [server guide](management/SERVER_SYNC.md).
+
+### Readable versions and cleanup
+
+Use `--date YYYYMMDD --edition N` only to request an unused edition. Default editions increase automatically. The top-level code follows data preparation, main regressions, robustness, mechanisms, and extensions; data preparation contains cleaning and analysis-data construction submodules. Table and figure export commands remain in the relevant analysis scripts.
+
+After a task and during a configured weekly check, list unused temporary text files, superseded outputs, and unreferenced duplicates. Retain required results, estimation samples, formal table `.txt` files, logs, and reproducibility evidence according to purpose. Cleanup candidates require explicit scope and authorization; no automatic deletion is implemented. This repository does not install a personal reminder automatically.

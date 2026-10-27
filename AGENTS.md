@@ -4,7 +4,7 @@
 
 项目根目录同时是 Git 根目录。code/、config/、management/、research_notes/、writing/、ai_records/ 与 data_raw/、data_intermeidate/、data_analysis/ 直接平级，不增加 project/ 包裹层。原始和中间数据不入 Git，data_analysis/ 纳入 Git；机器配置分别设置三个数据根路径。
 
-code/ 按 00_setup、01_clean、02_analysis_data、03_regressions、04_robustness 分类；阶段内的文件也编号并注明数据类型和用途。图表导出语句直接写在对应分析脚本中：回归后立即 outreg2，绘图后立即 graph export，不单设图表导出阶段；生成的表图仍保存到本次 outputs/ 对应目录。纯内部检查放 code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
+code/ 按 00_setup、01_data_preparation（内分01_clean/02_build）、02_main_regressions、03_robustness、04_mechanisms、05_extensions 分类；阶段内的文件也编号并注明数据类型和用途。图表导出语句直接写在对应分析脚本中：回归后立即 outreg2，绘图后立即 graph export，不单设图表导出阶段；生成的表图仍保存到本次 outputs/ 对应目录。纯内部检查放 code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
 
 management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化思考报告，通常为 Markdown；writing/ 放论文与正式汇报稿；ai_records/ 放核心聊天与恢复卡。不要另建 docs/ 或 docx/ 作为含混的并列目录。
 
@@ -28,7 +28,7 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 ## 执行与记录
 
-所有日志进入 `outputs/<任务>__<运行编号>/logs/`。启动 Stata 的工作目录必须先设为该目录；仅修改 `log using` 不足以处理启动日志。使用唯一运行目录，失败也保留。不得依赖旧会话的内存、宏或未保存结果。
+所有输出按类型放在outputs/tables、figures、logs、estimates、samples、qa、provenance、runs，再按code模块分类；日志在outputs/logs/<模块>/，生成文件名带YYYYMMDD_vNN，不创建随机后缀文件夹。启动 Stata 的工作目录必须先设为该目录；仅修改 `log using` 不足以处理启动日志。使用唯一运行目录，失败也保留。不得依赖旧会话的内存、宏或未保存结果。
 
 原始输入和已经验收的数据版本不原地覆盖。正式依赖不得只存在于 archive 或已删除代码；约定固定输入须明确生产来源和复现起点。禁止用历史结果默默填补缺失的必需输入。
 
@@ -56,7 +56,7 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 清理按 management/CLEANUP.csv 登记。未确认的删除先列具体路径、可删依据和恢复方式，再询问。已经明确确认的范围只执行该范围，保留操作清单。原始数据、正式版本及其依赖、日志、核心对话不因“文件旧”删除。Git 未提交、未推送内容和闲置 worktree 先核实；不直接删除 `.git`。
 
-服务器操作必须符合项目授权；未经明确授权不得连接或修改服务器。公开分享、外部发送和付费 API 不由本模板默认授权。
+服务器操作必须符合项目授权；未经明确授权不得连接或修改项目服务器。公开分享、外部发送和付费 API 不由本模板默认授权。
 
 ## 客户端兼容
 
@@ -68,6 +68,8 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 服务器沿用本机相同根目录与编号结构，不增加 project/ 层；根路径和软件路径可因机器不同而配置。本机更新不等于服务器已更新，远端旧快照不能证明实时一致；实际同步后核对远端指纹与目录，记录验证结果后才能标记完成。不得把同步同意扩大成付费采集、数据重建或回归重跑。未启用服务器的项目不连接服务器。每次任务结束同时检查是否产生尚未审批/同步的服务器代码变更。
 
-## 输出分类（用户明确要求）
+## 输出与数据分类（用户当前要求）
 
-遵循 management/OUTPUT_LAYOUT.md：每个 outputs/<任务>__<运行编号>/ 下，运行及启动日志放 logs，outreg2 和 Stata/Python 的研究表格放 tables，图形放 figures；估计对象、实际样本、检查结果与来源快照分别放 estimates、samples、qa、provenance。按用途分类，显式指定导出路径，禁止日志与研究图表混放。根目录仅保留运行元信息及状态。图表导出语句仍写在对应分析代码中。
+遵循management/OUTPUT_LAYOUT.md和DATA_LAYOUT.md。data_intermeidate和data_analysis逐级镜像code；不以运行时间或随机串分类。outputs以tables/figures/logs等用途为一级目录、code模块为二级，日期和版次直接标在文件名，例如main_table_demo_20261027_v01.txt。同一任务同日递增版次，已有版次不覆盖；禁止新建随机后缀文件夹。代码与配置源文件保留原名，内容指纹只写入元信息，不作为版本名。
+
+图表导出仍在对应分析代码中。每次任务结束和每周检查要列出完全不需要的临时txt、已废弃输出和无保留依赖的重复文件，给出可删依据、具体路径与授权状态；正式outreg2表格txt、有效日志和复现依赖按内容识别，不能仅凭扩展名删除。已明确获准删除的清单及时清理，其余候选提醒用户决定。

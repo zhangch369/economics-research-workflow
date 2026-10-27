@@ -1,5 +1,5 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
   "project_id": "economics_project_template",
   "purpose": "经济学科研工作流模板；仅合成示例已接入",
   "entrypoints": {
@@ -23,7 +23,9 @@
     "review_template": "management/templates/REVIEW.md",
     "claims": "management/CLAIMS.csv",
     "automation_roadmap": "management/AUTOMATION_ROADMAP.md",
-    "output_layout": "management/OUTPUT_LAYOUT.md"
+    "output_layout": "management/OUTPUT_LAYOUT.md",
+    "data_layout": "management/DATA_LAYOUT.md",
+    "usage": "management/USAGE.md"
   },
   "execution": {
     "python_minimum": "3.9",
@@ -32,7 +34,8 @@
     "machine_config": "config/machine.local.json",
     "formal_task_enabled": false,
     "public_export_command": "python3 export_replication.py",
-    "server_sync_plan": "python3 server_sync.py plan"
+    "server_sync_plan": "python3 server_sync.py plan",
+    "layout_check_command": "python3 code/90_qa/04_check_layout.py (run demo first; macOS check)"
   },
   "reproducibility": {
     "current_formal_release": null,
@@ -40,8 +43,11 @@
     "server_verified": false,
     "dependency_lock": "not frozen; actual versions recorded in each Stata log",
     "template_validation": {
-      "status": "NOT_RUN",
-      "scope": "public sanitized snapshot",
+      "layout_version": 4,
+      "date": "2026-10-27",
+      "status": "PASS",
+      "scope": "clean public template copy: synthetic demo, six layout checks, data/sample/full b-V comparison",
+      "evidence": "management/VALIDATION_20261027_v01.md",
       "real_server_connected": false
     }
   },
@@ -49,8 +55,8 @@
     "git_root": ".",
     "project_root": ".",
     "data_raw": "data_raw",
-    "data_intermediate": "data_intermeidate",
-    "data_analysis": "data_analysis",
+    "data_intermediate": "data_intermeidate/<relative-code-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
+    "data_analysis": "data_analysis/<relative-code-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
     "git_ignored_data": [
       "data_raw",
       "data_intermeidate"
@@ -58,7 +64,7 @@
     "git_tracked_data": [
       "data_analysis"
     ],
-    "outputs": "outputs/<task>__<run_id>",
+    "outputs": "outputs/<type>/<code-module>/<purpose>_<task>_YYYYMMDD_vNN.ext",
     "internal_qa": "code/90_qa",
     "management": "management",
     "research_notes": "research_notes",
@@ -70,8 +76,10 @@
       "estimates": "estimation objects",
       "samples": "actual samples",
       "qa": "validation artifacts",
-      "provenance": "snapshots/manifests/backups"
-    }
+      "provenance": "snapshots/manifests/backups",
+      "runs": "dated readable run records and statuses"
+    },
+    "run_records": "outputs/runs/<task>/run_YYYYMMDD_vNN.json"
   },
   "rules": {
     "formal_data_preparation": "Stata",
@@ -80,7 +88,10 @@
     "permission_for_server": "follow project-specific user authorization",
     "automatic_deletion": false,
     "qa_distribution": "internal code/90_qa retained in internal Git; excluded from public replication package",
-    "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory."
+    "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory.",
+    "version_naming": "YYYYMMDD_vNN directly on generated filenames; no random-suffix folders",
+    "data_directory_mirror": "data_intermeidate and data_analysis mirror code directories recursively",
+    "cleanup_reminders": "after tasks and weekly: unnecessary temporary txt, superseded outputs, and unreferenced duplicates; preserve required evidence"
   },
   "structure": {
     "registered_subprojects": [],
@@ -95,10 +106,11 @@
     ],
     "expected_code_stages": [
       "00_setup",
-      "01_clean",
-      "02_analysis_data",
-      "03_regressions",
-      "04_robustness",
+      "01_data_preparation",
+      "02_main_regressions",
+      "03_robustness",
+      "04_mechanisms",
+      "05_extensions",
       "90_qa"
     ],
     "project_wrapper_allowed": false

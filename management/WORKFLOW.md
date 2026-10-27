@@ -36,23 +36,23 @@ flowchart LR
 
 主回归、稳健性、探索各有 `spec_id` 和层级；禁止探索结果无说明地替换主结果。`SPECIFICATIONS.csv` 写清：分析单位、处理/对照、Y/X、变量时间、样本、固定效应、聚类、识别策略及限制。缩尾→取对数→求均值→差分并无通用顺序，必须逐规格记录用户实际指定的顺序。
 
-对不同对照组分别登记；未核实记录保留缺失。按规格记录估计器选项、变量时点、分类方法与覆盖样本；公式核查、数据复现和均衡求解分别验收。
+对科技园，普通对照与 pseudo 对照分别登记；未核实的检查记录保留缺失，PPML 维持项目指定的 `sep(none)`。对 AI 长差分，同期指标、基期控制与端点变换分别记录。对贸易长均值/异质性，不混淆不同分类、固定效应与覆盖样本；JIE2022/CP2015 的公式核查、数据复现与均衡求解分别验收。
 
 ## 3. 每次运行就是一份可追溯记录
 
 ```text
-outputs/baseline__20261027_170000_ab12cd34/
-├── run.json, STATUS.txt, STATA_RC.txt
-├── logs/             启动日志、Stata 日志、终端输出、错误
-├── provenance/       实际执行代码、输入指纹、任务配置、环境路径
-├── estimates/, samples/
-├── tables/, figures/
-└── qa/               样本、数值、成品与复现检查
+outputs/
+├── tables/02_main_regressions/main_table_demo_20261027_v01.txt
+├── figures/02_main_regressions/main_figure_demo_20261027_v01.pdf
+├── logs/02_main_regressions/analysis_demo_20261027_v01.log
+├── estimates/、samples/、qa/         各按code模块分类、文件日期版次
+├── provenance/                     对应版次来源快照
+└── runs/demo/run_20261027_v01.json   运行记录与准确产物路径
 ```
 
 运行记录回答：哪台机器、哪个代码版本、哪些输入、哪个任务/规格、何时开始结束、环境是什么、结果在哪里、为什么成功或失败。模板保留 Stata `about` 和 `which` 输出；正式项目还需固定 ado 依赖及报告工具版本。仅写 `version 18.0` 不能替代对用户扩展包、字体和外部软件的记录。
 
-Stata 启动前将进程工作目录设为本次 `logs/`，用绝对路径执行包装 do-file；业务路径统一由配置生成。失败日志保留在同一运行目录，不覆盖上一轮。突然断电或强制终止可能留下 `RUNNING`，应核查进程后补记为中断，不能据此当成成功。
+Stata 启动前将进程工作目录设为对应模块的 `outputs/logs/`，用绝对路径执行包装 do-file；业务路径统一由配置生成。失败日志保留在同一运行目录，不覆盖上一轮。突然断电或强制终止可能留下 `RUNNING`，应核查进程后补记为中断，不能据此当成成功。
 
 内部成功判定由三项组成：程序结束正常、必需产物齐全、独立 QA 通过。QA 在 code/90_qa/，由启动器在生产入口之外调用。对外生产复现包排除内部 QA 和任务配置中的 QA 调用，明确记录 qa_status=NOT_RUN；生产链能够独立运行。真实项目的数值对照、全链数据重建和论文成品验收仍需逐项登记。
 
@@ -66,7 +66,7 @@ code、config、data_raw、data_intermeidate、data_analysis 和其他功能目�
 4. 先跑合成示例，再跑一个指定正式任务；比较主键、样本、系数/协方差、标准误、观测数、聚类数、被省略项与成品。最后运行约定范围的完整入口。
 5. 把目标机器的新运行目录带回，登记到版本/恢复卡；原版本保留。任务交接标明当前执行机器，避免两个机器覆盖同一可变目录。
 
-每次独立构建使用新数据版本；只重跑估计则显式引用已冻结的版本，不“自动寻找最新数据”。模板通过 `config/tasks.json` 登记输入，尚未提供自动缓存或断点续跑系统。
+每次独立构建使用新的日期版次文件；只重跑估计则显式引用已冻结的版本，不“自动寻找最新数据”。模板通过 `config/tasks.json` 登记输入，尚未提供自动缓存或断点续跑系统。
 
 ## 5. 可复现分清起点
 
@@ -129,7 +129,7 @@ Stata 官方文档说明批处理与日志行为、Windows 的工作目录设置
 
 ## 当前目录命名补充
 
-management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 采用 00_setup→01_clean→02_analysis_data→03_regressions→04_robustness；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
+management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 参照示例研究项目采用 00_setup→01_data_preparation（内分01_clean/02_build）→02_main_regressions→03_robustness→04_mechanisms→05_extensions；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
 
 ## 服务器代码协作
 
@@ -142,3 +142,7 @@ management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown
 协调者统一维护共享登记和恢复索引；正文关键论断使用 CLAIMS.csv 接到 EXHIBITS.csv。自动化能力与未完成项以 AUTOMATION_ROADMAP.md 为准。原第3节的运行留档已由启动器支持；任务卡、状态汇总及论断登记目前由 agent/人工维护，不能称全自动。
 
 输出分类细则见 [OUTPUT_LAYOUT.md](OUTPUT_LAYOUT.md)：所有语言统一使用 logs/tables/figures，日志与研究图表分开。
+
+## 当前分类与命名规则
+
+DATA_LAYOUT和OUTPUT_LAYOUT为当前有效布局：数据逐级镜像code；outputs类型优先；版本直接标文件名YYYYMMDD_vNN，不新建随机后缀目录。每次结束/每周检查提醒清理完全无用的临时txt和废弃产物，保留正式结果与复现依赖；旧的随机目录说明仅属于历史设计，不能用于新任务。
