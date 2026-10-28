@@ -25,7 +25,7 @@
     "automation_roadmap": "management/AUTOMATION_ROADMAP.md",
     "output_layout": "management/OUTPUT_LAYOUT.md",
     "data_layout": "management/DATA_LAYOUT.md",
-    "usage": "management/USAGE.md"
+    "nustp_reference": "management/NUSTP_LAYOUT_REFERENCE_20261027_v01.md"
   },
   "execution": {
     "python_minimum": "3.9",
@@ -44,10 +44,10 @@
     "dependency_lock": "not frozen; actual versions recorded in each Stata log",
     "template_validation": {
       "layout_version": 4,
-      "date": "2026-10-28",
+      "date": "2026-10-27",
       "status": "PASS",
-      "scope": "flat registered data directories, corrected analysis-stage and raw snapshot names, PNG/DOC formats, synthetic demo, layout/data/sample/full b-V comparison",
-      "evidence": "management/VALIDATION_20261028_v05.md",
+      "scope": "readable editions, refusal to overwrite, exact data/code directories, type-first outputs, relocated internal/public synthetic reproduction and full b/V comparison",
+      "qa_report": "outputs/runs/layout_checks/run_20261027_v02.json",
       "real_server_connected": false
     }
   },
@@ -55,11 +55,11 @@
     "git_root": ".",
     "project_root": ".",
     "data_raw": "data_raw",
-    "data_intermediate": "data_intermediate/<data-stage-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
-    "data_analysis": "data_analysis/<data-stage-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
+    "data_intermediate": "data_intermeidate/<relative-code-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
+    "data_analysis": "data_analysis/<relative-code-directory>/<name>_<task>_YYYYMMDD_vNN.ext",
     "git_ignored_data": [
       "data_raw",
-      "data_intermediate"
+      "data_intermeidate"
     ],
     "git_tracked_data": [
       "data_analysis"
@@ -90,7 +90,7 @@
     "qa_distribution": "internal code/90_qa retained in internal Git; excluded from public replication package",
     "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory.",
     "version_naming": "YYYYMMDD_vNN directly on generated filenames; no random-suffix folders",
-    "data_directory_mapping": "Each task declares flat data directories and each intermediate or analysis artifact declares module plus data_module. Use data_intermediate/01_clean, data_analysis/01_clean, and data_analysis/02_analysis_data; do not repeat the 01_data_preparation parent.",
+    "data_directory_mirror": "data_intermeidate and data_analysis mirror code directories recursively",
     "cleanup_reminders": "after tasks and weekly: unnecessary temporary txt, superseded outputs, and unreferenced duplicates; preserve required evidence",
     "output_formats": {
       "figures": "png_only",

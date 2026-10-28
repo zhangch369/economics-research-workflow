@@ -1,1 +1,5 @@
 record_id,date,topic,client,chat_id_or_url,core_record,restore_card,spec_id,run_id,status
+20261027_inline_table_figure_export,2026-10-27,图表导出与分析代码同处,Codex,01a17b31-c3f4-7c62-a9d0-b873ab1cee64,20261027_inline_table_figure_export/CORE_AND_RESTORE.md,20261027_inline_table_figure_export/CORE_AND_RESTORE.md,not_applicable,not_applicable,complete
+20261027_agent_workflow_upgrade,2026-10-27,科研模板多agent协作规则,Codex,not_recorded,20261027_agent_workflow_upgrade/CORE_AND_RESTORE.md,20261027_agent_workflow_upgrade/CORE_AND_RESTORE.md,not_applicable,not_applicable,complete
+20261027_readable_versions_v01,2026-10-27,数据/code镜像与日期版次,Codex,01a17b31-c3f4-7c62-a9d0-b873ab1cee64,20261027_readable_versions_v01/CORE_AND_RESTORE.md,20261027_readable_versions_v01/CORE_AND_RESTORE.md,not_applicable,demo_20261027_v01,complete
+20261027_png_doc_v01,2026-10-27,PNG图片与DOC回归表,Codex,01a17b31-c3f4-7c62-a9d0-b873ab1cee64,20261027_png_doc_v01/CORE_AND_RESTORE.md,20261027_png_doc_v01/CORE_AND_RESTORE.md,not_applicable,20261027_v03,complete

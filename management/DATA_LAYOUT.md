@@ -1,50 +1,20 @@
-# 数据目录：按产出阶段扁平归档
+# 数据目录逐级对应code
 
-三层数据根目录与code根目录平级。派生数据不复制code的完整层级，避免出现重复且难读的`data_analysis/01_data_preparation/02_analysis_data`。
+规则：除raw保留来源分类外，data_intermeidate与data_analysis的目录层级必须和code完全对应，包括专题和研究线子目录，不自行增加日期目录、哈希目录或另一套业务分类。
 
 ```text
 code/01_data_preparation/01_clean/01_firm_year_clean.do
-  → data_intermediate/01_clean/firm_year_panel_demo_20261027_v01.dta
-
-code/01_data_preparation/02_analysis_data/01_firm_year_analysis.do
-  → data_analysis/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta
-
-data_analysis/01_clean/
-  → 项目级清洗分析输入的保留目录
-
-data_raw/demo/v01/firm_year.csv
-  → 原始合成输入，按来源和版本留存
+  → data_intermeidate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta
+code/01_data_preparation/02_build/01_firm_year_analysis.do
+  → data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta
+code/02_main_regressions/01_main.do
+  → 读取上述冻结分析文件；估计/实际样本写outputs/estimates和outputs/samples
 ```
 
-## 显式映射
+镜像以**生产数据的代码所在目录**为准。下游代码显式读取已登记的生产文件，不把同一分析数据到处复制。没有数据产物的模块可以保留空目录，便于统一查找。code目录增加、移动或增加研究线后，两层数据同步增加相同目录；当前运行器从code实际目录自动建立镜像。旧目录必须先记录映射再归位，不能让旧代码失去输入却宣称可复现。
 
-`config/tasks.json`在任务级`data_directories`登记本任务允许存在的数据目录；每个中间或分析产物另登记：
+例如NUSTP某专题包含code/02_main_regressions/legacy_may和revised，两层数据也应出现相同相对目录。legacy_may/revised是研究线，不替代日期版次；文件本身仍需YYYYMMDD_vNN。主稿、投稿包和候选修改线的采用关系单独登记，不能只靠日期决定哪份是正式结果。
 
-- `module`：生产该数据的code相对目录，用于验证生产代码真实存在。
-- `data_module`：数据根目录下的扁平相对目录，用于决定实际落盘位置。
+data_raw不入Git；data_intermeidate不入Git；data_analysis纳入Git。日期版次在文件名，不以随机目录替代版本。对外包按config/replication_export.json的analysis_files逐份选择分析文件，不能自动把“最近”文件当作已接受版本。
 
-合成任务映射：
-
-|目录或产物|code模块|数据根|data_module|
-|---|---|---|---|
-|中间面板|`01_data_preparation/01_clean`|`data_intermediate`|`01_clean`|
-|分析层清洗输入|`01_data_preparation/01_clean`|`data_analysis`|`01_clean`|
-|分析数据|`01_data_preparation/02_analysis_data`|`data_analysis`|`02_analysis_data`|
-
-运行器只创建任务实际登记的`data_directories`和数据产物`data_module`，不再根据完整code目录树批量创建空镜像目录。`data_analysis/01_clean/`当前用`.gitkeep`保留目录，不复制合成fixture；真实项目需要时可登记项目级清洗分析输入。
-
-## 研究线与版本
-
-普通数据处理固定使用上述扁平结构。若同一阶段存在`legacy_may`、`revised`等并行研究线，`data_module`可使用可读的相对子路径，例如`01_clean/revised`或`02_analysis_data/legacy_may`，但必须在任务配置和数据登记中明确写出，不能自动从code路径推测。
-
-数据文件名继续使用`用途_任务_YYYYMMDD_vNN.ext`。日期和版次写在文件名中，不使用随机或哈希目录替代版本。
-
-## Git与来源
-
-- `data_raw/`保存原始或固定输入，默认不入Git；公开模板只对合成fixture保留明确例外。
-- `data_intermediate/`保存阶段中间数据，不入Git。
-- `data_analysis/`保存可供估计读取的分析数据，按项目授权纳入Git。
-
-对外复现包按`config/replication_export.json`明确选择分析数据版本，不自动把“最近”文件当正式版本。下游代码读取已登记文件，不把同一分析数据复制到多个目录。
-
-当前附带数据均为合成示例；NUSTP仅作只读分类参照。历史迁移路径保留在旧迁移记录中，不回写为当前结构。
+当前附带数据为合成示例；NUSTP仅作只读分类参照。本任务没有重排NUSTP数据或改动其规格。已有合成历史文件的归位和内容指纹见LAYOUT_MIGRATION_20261027_v01.csv。

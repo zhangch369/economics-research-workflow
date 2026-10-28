@@ -6,7 +6,7 @@ version 18.0
 display as error "Formal pipeline is not configured. Read README.md and AGENTS.md."
 error 459
 * do "$CODE/01_data_preparation/01_clean/01_firm_year_clean.do"
-* do "$CODE/01_data_preparation/02_analysis_data/01_firm_year_analysis.do"
+* do "$CODE/01_data_preparation/02_build/01_firm_year_analysis.do"
 * do "$CODE/02_main_regressions/01_main.do"
 * do "$CODE/03_robustness/01_alternative_sample.do"
 * 图表由对应分析脚本直接导出到本次 outputs/tables 或 outputs/figures。

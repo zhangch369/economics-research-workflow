@@ -3,9 +3,8 @@ __pycache__/
 *.pyc
 .env
 *.env
-/data_raw/*
-!/data_raw/demo/
-/data_intermediate/
+/data_raw/
+/data_intermeidate/
 /config/machine.local.json
 /config/server.local.json
 /outputs/

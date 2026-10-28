@@ -2,9 +2,9 @@
 
 ## 用户指定的目录规则（当前有效）
 
-项目根目录同时是 Git 根目录。code/、config/、management/、research_notes/、writing/、ai_records/ 与 data_raw/、data_intermediate/、data_analysis/ 直接平级，不增加 project/ 包裹层。原始和中间数据不入 Git，data_analysis/ 纳入 Git；机器配置分别设置三个数据根路径。
+项目根目录同时是 Git 根目录。code/、config/、management/、research_notes/、writing/、ai_records/ 与 data_raw/、data_intermeidate/、data_analysis/ 直接平级，不增加 project/ 包裹层。原始和中间数据不入 Git，data_analysis/ 纳入 Git；机器配置分别设置三个数据根路径。
 
-code/ 按 00_setup、01_data_preparation（内分01_clean/02_analysis_data）、02_main_regressions、03_robustness、04_mechanisms、05_extensions 分类；阶段内的文件也编号并注明数据类型和用途。派生数据不复制code的完整路径，而由config/tasks.json中每个数据产物的module（生产代码路径）和data_module（数据落盘目录）显式映射：清洗中间数据写data_intermediate/01_clean/，分析数据层保留data_analysis/01_clean/和data_analysis/02_analysis_data/两个编号目录。图表导出语句直接写在对应分析脚本中，回归后立即outreg2，绘图后立即graph export，不单设图表导出阶段；生成的表图仍保存到本次outputs/对应目录。纯内部检查放code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
+code/ 按 00_setup、01_data_preparation（内分01_clean/02_build）、02_main_regressions、03_robustness、04_mechanisms、05_extensions 分类；阶段内的文件也编号并注明数据类型和用途。图表导出语句直接写在对应分析脚本中：回归后立即 outreg2，绘图后立即 graph export，不单设图表导出阶段；生成的表图仍保存到本次 outputs/ 对应目录。纯内部检查放 code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
 
 management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化思考报告，通常为 Markdown；writing/ 放论文与正式汇报稿；ai_records/ 放核心聊天与恢复卡。不要另建 docs/ 或 docx/ 作为含混的并列目录。
 
@@ -56,7 +56,7 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 清理按 management/CLEANUP.csv 登记。未确认的删除先列具体路径、可删依据和恢复方式，再询问。已经明确确认的范围只执行该范围，保留操作清单。原始数据、正式版本及其依赖、日志、核心对话不因“文件旧”删除。Git 未提交、未推送内容和闲置 worktree 先核实；不直接删除 `.git`。
 
-服务器操作必须符合项目授权；未经明确授权不得连接或修改项目服务器。公开分享、外部发送和付费 API 不由本模板默认授权。
+服务器操作必须符合项目授权；科技园项目未经明确授权不得连接 Win Server。公开分享、外部发送和付费 API 不由本模板默认授权。
 
 ## 客户端兼容
 
@@ -64,16 +64,16 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 ## 本机与服务器协作（用户要求）
 
-若项目有服务器运行代码，先读 management/SERVER_SYNC.md 与私有服务器配置。本机相关代码/任务配置变更后，执行 python3 server_sync.py plan 生成离线差异，记录待同步状态，向 项目负责人 展示服务器、目标目录、文件差异与验证步骤；必须获得本次同步同意后才连接服务器、上传或修改代码。授权范围内的同步按既有同意执行，不重复询问。
+若项目有服务器运行代码，先读 management/SERVER_SYNC.md 与私有服务器配置。本机相关代码/任务配置变更后，执行 python3 server_sync.py plan 生成离线差异，记录待同步状态，向 Zhangchi 展示服务器、目标目录、文件差异与验证步骤；必须获得本次同步同意后才连接服务器、上传或修改代码。授权范围内的同步按既有同意执行，不重复询问。
 
 服务器沿用本机相同根目录与编号结构，不增加 project/ 层；根路径和软件路径可因机器不同而配置。本机更新不等于服务器已更新，远端旧快照不能证明实时一致；实际同步后核对远端指纹与目录，记录验证结果后才能标记完成。不得把同步同意扩大成付费采集、数据重建或回归重跑。未启用服务器的项目不连接服务器。每次任务结束同时检查是否产生尚未审批/同步的服务器代码变更。
 
 ## 输出与数据分类（用户当前要求）
 
-遵循management/OUTPUT_LAYOUT.md和DATA_LAYOUT.md。data_intermediate使用01_clean等生产阶段叶子目录；data_analysis包含01_clean和02_analysis_data两个编号目录；不得在数据层重复01_data_preparation父目录。每个派生数据目录通过config/tasks.json的data_directories和data_module显式登记，不以运行时间或随机串分类。outputs以tables/figures/logs等用途为一级目录、code模块为二级，日期和版次直接标在文件名，例如main_table_demo_20261027_v01.doc。同一任务同日递增版次，已有版次不覆盖；禁止新建随机后缀文件夹。代码与配置源文件保留原名，内容指纹只写入元信息，不作为版本名。
+遵循management/OUTPUT_LAYOUT.md和DATA_LAYOUT.md。data_intermeidate和data_analysis逐级镜像code；不以运行时间或随机串分类。outputs以tables/figures/logs等用途为一级目录、code模块为二级，日期和版次直接标在文件名，例如main_table_demo_20261027_v01.doc。同一任务同日递增版次，已有版次不覆盖；禁止新建随机后缀文件夹。代码与配置源文件保留原名，内容指纹只写入元信息，不作为版本名。
 
-图表导出仍在对应分析代码中。每次任务结束和每周检查要列出完全不需要的临时txt、已废弃输出和无保留依赖的重复文件，给出可删依据、具体路径与授权状态；正式outreg2表格txt、有效日志和复现依赖按内容识别，不能仅凭扩展名删除。已明确获准删除的清单及时清理，其余候选提醒用户决定。
+图表导出仍在对应分析代码中。每次任务结束和每周检查要列出完全不需要的临时txt、已废弃输出和无保留依赖的重复文件，给出可删依据、具体路径与授权状态；历史正式outreg2表格txt、有效日志和复现依赖按内容识别，不能仅凭扩展名删除。已明确获准删除的清单及时清理，其余候选提醒用户决定。
 
-## 图表格式（当前要求）
+## 图表格式（用户当前要求）
 
 新生成的图片只输出PNG，不额外导出PDF、GPH、SVG或JPG；新回归表只输出DOC，不额外保留TXT、Excel或TeX版本。回归后立即outreg2 using对应DOC路径并指定word；同一表的全部列完成后，清理本次outreg2精确同名的临时TXT，不在追加列之间删除。日志和QA文本不受回归表格式限制，历史表图未经确认不批量删除。论文/汇报源稿及其PDF成品属于writing，不是额外图片格式。

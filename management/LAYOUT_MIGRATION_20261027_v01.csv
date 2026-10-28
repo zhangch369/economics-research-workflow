@@ -1,0 +1,2 @@
+old_path,new_path,sha256,scope
+data_analysis/20261027_111808_a41bc148/analysis.dta,data_analysis/01_data_preparation/02_build/firm_year_analysis_reference_20261027_v01.dta,29db7a2aa94346c715eecdfcb11fa5ced8b018dd11bf8e4898693ae82bb2a0b5,historical synthetic input only; content unchanged

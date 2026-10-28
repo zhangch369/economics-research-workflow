@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Stata生产任务入口：按data_module登记派生数据目录，类型优先输出，日期和版次命名。"""
+"""Stata生产任务入口：代码镜像数据目录，类型优先输出，日期和版次命名。"""
 import argparse
 import hashlib
 import json
@@ -44,12 +44,11 @@ def main():
     task = tasks[args.task]
     profile = json.loads(resolve(ROOT,args.profile).read_text())
     roots = {k:resolve(ROOT,profile.get(field,default)) for k,field,default in [
-        ('raw','data_raw_root','data_raw'), ('intermediate','data_intermediate_root','data_intermediate'),
+        ('raw','data_raw_root','data_raw'), ('intermediate','data_intermediate_root','data_intermeidate'),
         ('analysis','data_analysis_root','data_analysis')]}
     reserved=set()
     for spec in task.get('artifacts',{}).values():
-        module=spec.get('data_module',spec['module']) if spec['area'] in ('intermediate','analysis') else spec['module']
-        directory=(roots[spec['area']] if spec['area'] in roots else ROOT/'outputs'/spec['area'])/module
+        directory=(roots[spec['area']] if spec['area'] in roots else ROOT/'outputs'/spec['area'])/spec['module']
         pattern=re.compile(re.escape(f"{spec['stem']}_{args.task}_")+r'(\d{8}_v\d+)'+re.escape(spec['suffix'])+r'$')
         if directory.is_dir():
             for path in directory.iterdir():
@@ -82,7 +81,7 @@ def main():
         stata = resolve(ROOT,profile['stata_bin'])
         if not stata.is_file(): raise FileNotFoundError(f'请填写Stata实际路径：{stata}')
         if len(set(roots.values())) != 3: raise ValueError('三层数据须使用不同目录。')
-        mirror_data_directories(roots,task)
+        mirror_data_directories(ROOT,roots)
         specs = dict(task['artifacts'])
         if task.get('qa_entry'): specs.update(task.get('qa_artifacts',{}))
         artifacts = {name:layout.artifact(spec,roots) for name,spec in specs.items()}

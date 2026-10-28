@@ -1,4 +1,4 @@
-# 项目负责人 的经济学科研管理方式
+# Zhangchi 的经济学科研管理方式
 
 先做一个改变：**以后每个重要结果，都绑定一个运行编号、一份分析数据版本和一张 AI 恢复卡。** 文件夹结构服务于这三个关联。
 
@@ -7,7 +7,7 @@
 |层级|保存内容|修改规则|最低验收|
 |---|---|---|---|
 |data_raw：原始/固定输入|来源原件、下载包、年报 PDF、API 原始响应、约定冻结快照|每次采集建新快照，不直接改原件|来源、获取时间、覆盖范围、文件清单与指纹|
-|data_intermediate：中间数据|标准化、匹配、筛选、合并后的阶段数据|由明确代码生成；同一版本不被其他运行覆盖|唯一键、匹配率、重复、缺失、观测数变化|
+|data_intermeidate：中间数据|标准化、匹配、筛选、合并后的阶段数据|由明确代码生成；同一版本不被其他运行覆盖|唯一键、匹配率、重复、缺失、观测数变化|
 |data_analysis：分析数据|变量处理和样本规则已经落实、供估计读取的数据|数据版本固定；改变规则产生新版本|单位、样本、变量时间、处理顺序与正式数据签名|
 |outputs：结果证据|日志、估计、实际估计样本、表图、QA、环境和代码快照|每次运行独立留档，包括失败|退出状态、必需产物、独立 QA 与结果核对|
 
@@ -58,7 +58,7 @@ Stata 启动前将进程工作目录设为对应模块的 `outputs/logs/`，用�
 
 ## 4. 本机与服务器搬家：只改机器配置
 
-code、config、data_raw、data_intermediate、data_analysis 和其他功能目录在同一个项目根目录平级；根目录同时是 Git 根目录。原始和中间数据忽略，分析数据纳入 Git。机器配置分别填写 data_raw_root、data_intermediate_root、data_analysis_root；可指向对应挂载盘。业务脚本只使用这三个配置派生的路径，不写个人桌面路径或盘符。
+code、config、data_raw、data_intermeidate、data_analysis 和其他功能目录在同一个项目根目录平级；根目录同时是 Git 根目录。原始和中间数据忽略，分析数据纳入 Git。机器配置分别填写 data_raw_root、data_intermediate_root、data_analysis_root；可指向对应挂载盘。业务脚本只使用这三个配置派生的路径，不写个人桌面路径或盘符。
 
 1. 冻结待搬版本：记录代码提交/快照、数据清单、运行状态和已接受结果；暂停对同一数据版本的写入。
 2. 传代码和所需数据版本：本机通常只需分析数据、估计所需中间输入和必要字典；全链重建才传完整原始快照。第一次传输不带删除选项，不用双向自动同步合并正在写入的 `.dta`。
@@ -108,7 +108,7 @@ QA 不依赖“显著性一致”。先比较样本键与离散状态，再比�
 
 “可再生成”不自动等于“现在可删”：如果重建需数天、付费请求、已不可访问的输入或已删除代码，应保留或先补齐来源。用户确认不要的具体文件可以按清单删除；不再询问已确认范围，但存在新的下游依赖时先说明冲突。
 
-Git 管理生产代码、内部 code/90_qa、文本与 data_analysis/ 中需保留的分析数据版本；data_raw/ 和 data_intermediate/ 用独立备份与清单，不同步 Git。Git 大小异常先辨认是大文件历史、正常对象还是闲置工作区；整理 worktree 优先使用管理工具。普通维护不需要删除 `.git`；历史重写、强制 prune 或抹掉仓库需单独授权。Git 状态干净也不能证明大型数据已备份。
+Git 管理生产代码、内部 code/90_qa、文本与 data_analysis/ 中需保留的分析数据版本；data_raw/ 和 data_intermeidate/ 用独立备份与清单，不同步 Git。Git 大小异常先辨认是大文件历史、正常对象还是闲置工作区；整理 worktree 优先使用管理工具。普通维护不需要删除 `.git`；历史重写、强制 prune 或抹掉仓库需单独授权。Git 状态干净也不能证明大型数据已备份。
 
 重要版本至少有工作副本和另一设备/位置的恢复副本；定期选择一个版本测试恢复。若使用云同步，不把唯一同步副本当作独立备份。备份范围覆盖数据、代码、日志、核心聊天与写作；凭据单独管理。
 
@@ -129,11 +129,11 @@ Stata 官方文档说明批处理与日志行为、Windows 的工作目录设置
 
 ## 当前目录命名补充
 
-management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 参照示例研究项目采用 00_setup→01_data_preparation（内分01_clean/02_analysis_data）→02_main_regressions→03_robustness→04_mechanisms→05_extensions；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
+management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 参照NUSTP采用 00_setup→01_data_preparation（内分01_clean/02_build）→02_main_regressions→03_robustness→04_mechanisms→05_extensions；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
 
 ## 服务器代码协作
 
-涉及服务器代码时，本机修改后按 SERVER_SYNC.md 生成离线差异，获得 项目负责人 对本次同步的同意后再连接/上传/修改服务器。服务器与本机采用相同扁平根目录，不增加 project 层。实际远端指纹和适用任务验证通过后才记录同步完成；只与旧快照一致不代表实时远端一致。
+涉及服务器代码时，本机修改后按 SERVER_SYNC.md 生成离线差异，获得 Zhangchi 对本次同步的同意后再连接/上传/修改服务器。服务器与本机采用相同扁平根目录，不增加 project 层。实际远端指纹和适用任务验证通过后才记录同步完成；只与旧快照一致不代表实时远端一致。
 
 ## 2026-10-27：任务化协作补充（当前规则）
 
@@ -145,6 +145,4 @@ management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown
 
 ## 当前分类与命名规则
 
-DATA_LAYOUT和OUTPUT_LAYOUT为当前有效布局：派生数据通过config/tasks.json的data_directories和data_module扁平归档，默认清洗数据位于data_intermediate/01_clean；data_analysis保留01_clean与02_analysis_data两个编号目录，不在数据层重复01_data_preparation父目录；outputs类型优先；版本直接标文件名YYYYMMDD_vNN，不新建随机后缀目录。每次结束/每周检查提醒清理完全无用的临时txt和废弃产物，保留正式结果与复现依赖；旧的随机目录说明仅属于历史设计，不能用于新任务。
-
-新生成的图片固定PNG，新回归表固定DOC；outreg2使用word选项，同一张表全部列完成后清理精确同名的临时TXT。日志、QA文本和历史表图按用途保留。
+DATA_LAYOUT和OUTPUT_LAYOUT为当前有效布局：数据逐级镜像code；outputs类型优先；版本直接标文件名YYYYMMDD_vNN，不新建随机后缀目录。每次结束/每周检查提醒清理完全无用的临时txt和废弃产物，保留正式结果与复现依赖；旧的随机目录说明仅属于历史设计，不能用于新任务。

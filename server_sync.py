@@ -59,7 +59,7 @@ def main():
             config_path = ROOT / "config/server.example.json"
         config = json.loads(config_path.read_text(encoding="utf-8"))
         if config.get("approval_required") is not True:
-            raise ValueError("服务器操作必须保留 项目负责人 的审批要求，不能禁用 approval_required。")
+            raise ValueError("服务器操作必须保留 Zhangchi 的审批要求，不能禁用 approval_required。")
         local = snapshot(config)
         write(manifest_path, local)
         if args.action == "snapshot":

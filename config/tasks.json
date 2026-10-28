@@ -4,33 +4,22 @@
     "scope": "synthetic_demo_only",
     "entry": "00_run_demo.do",
     "output_module": "02_main_regressions",
-    "data_directories": {
-      "intermediate": [
-        "01_clean"
-      ],
-      "analysis": [
-        "01_clean",
-        "02_analysis_data"
-      ]
-    },
     "inputs": [
       {
         "area": "raw",
-        "path": "demo/v01/firm_year.csv"
+        "path": "demo/v1/firm_year.csv"
       }
     ],
     "artifacts": {
       "PANEL_FILE": {
         "area": "intermediate",
         "module": "01_data_preparation/01_clean",
-        "data_module": "01_clean",
         "stem": "firm_year_panel",
         "suffix": ".dta"
       },
       "ANALYSIS_FILE": {
         "area": "analysis",
-        "module": "01_data_preparation/02_analysis_data",
-        "data_module": "02_analysis_data",
+        "module": "01_data_preparation/02_build",
         "stem": "firm_year_analysis",
         "suffix": ".dta"
       },

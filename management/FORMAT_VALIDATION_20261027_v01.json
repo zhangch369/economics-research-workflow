@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "date": "2026-10-27",
+  "figures": "PNG only",
+  "regression_tables": "DOC only",
+  "txt_sidecar": "absent after completed table",
+  "checks": [
+    {
+      "check": "repeat_increments_readable_edition_and_refuses_overwrite",
+      "status": "PASS",
+      "first": "20261027_v04",
+      "second": "20261027_v05"
+    },
+    {
+      "check": "png_images_doc_regression_tables_and_no_txt_sidecars",
+      "status": "PASS"
+    },
+    {
+      "check": "mirrored_data_directories_and_type_first_dated_artifacts",
+      "status": "PASS"
+    },
+    {
+      "check": "relocation_and_git_policy",
+      "status": "PASS",
+      "record": "/Users/zhangchi/Desktop/ical_design/economic_research_workflow/economics_workspace/outputs/provenance/90_qa/layout_checks_20261027_v03/workspaces/内部迁移副本/outputs/runs/demo/run_20261027_v01.json"
+    },
+    {
+      "check": "public_package_runs_without_qa_and_preserves_included_analysis_edition",
+      "status": "PASS",
+      "archive": "/Users/zhangchi/Desktop/ical_design/economic_research_workflow/economics_workspace/releases/replication_20261027_v04.zip",
+      "record": "/Users/zhangchi/Desktop/ical_design/economic_research_workflow/economics_workspace/outputs/provenance/90_qa/layout_checks_20261027_v03/workspaces/公开生产包/economics_workspace/outputs/runs/demo/run_20261027_v02.json"
+    },
+    {
+      "check": "server_plan_uses_readable_type_first_paths_without_connection",
+      "status": "PASS"
+    },
+    {
+      "check": "historical_current_relocated_and_public_data_samples_full_b_V_match",
+      "status": "PASS",
+      "tolerance": 1e-10
+    }
+  ],
+  "scope": "synthetic template; no changes to actual research specifications",
+  "qa_record": "/Users/zhangchi/Desktop/ical_design/economic_research_workflow/economics_workspace/outputs/runs/layout_checks/run_20261027_v03.json"
+}
