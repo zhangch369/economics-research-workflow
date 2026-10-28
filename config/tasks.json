@@ -27,13 +27,15 @@
         "area": "tables",
         "module": "02_main_regressions",
         "stem": "main_table",
-        "suffix": ".txt"
+        "suffix": ".doc",
+        "kind": "regression_table"
       },
       "MAIN_FIGURE": {
         "area": "figures",
         "module": "02_main_regressions",
         "stem": "main_figure",
-        "suffix": ".pdf"
+        "suffix": ".png",
+        "kind": "figure"
       },
       "MAIN_ESTIMATE": {
         "area": "estimates",

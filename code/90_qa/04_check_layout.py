@@ -52,7 +52,16 @@ def check(layout):
             if file.is_file():assert re.search(r'_\d{8}_v\d+\.',file.name),str(file)
     for folder in (ROOT/'outputs').rglob('*'):
         if folder.is_dir():assert not re.search(r'\d{8}_\d{6}_[a-f0-9]{8}$',folder.name),str(folder)
-    assert Path(base['artifacts']['MAIN_FIGURE']).read_bytes().startswith(b'%PDF')
+    figure=Path(base['artifacts']['MAIN_FIGURE']);table=Path(base['artifacts']['MAIN_TABLE'])
+    assert figure.suffix=='.png' and figure.read_bytes().startswith(b'\x89PNG\r\n\x1a\n')
+    assert table.suffix=='.doc' and table.read_bytes().lstrip().startswith(b'{\\rtf')
+    assert not table.with_suffix('.txt').exists()
+    assert not any(figure.with_suffix(ext).exists() for ext in ['.pdf','.gph','.svg','.jpg'])
+    for area,kind,suffix in [('figures','figure','.pdf'),('tables','regression_table','.txt')]:
+        try:layout.artifact({'area':area,'kind':kind,'module':'02_main_regressions','stem':'invalid_format','suffix':suffix},{})
+        except ValueError:pass
+        else:raise AssertionError('未拒绝不符合规则的图表格式')
+    checks.append({'check':'png_images_doc_regression_tables_and_no_txt_sidecars','status':'PASS'})
     checks.append({'check':'mirrored_data_directories_and_type_first_dated_artifacts','status':'PASS'})
     moved=work/'内部迁移副本'
     shutil.copytree(ROOT,moved,ignore=shutil.ignore_patterns('outputs','releases','data_intermeidate','data_analysis','__pycache__','.git'))

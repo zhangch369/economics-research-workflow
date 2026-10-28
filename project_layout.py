@@ -95,6 +95,10 @@ class RunLayout:
 
     def artifact(self, spec, data_roots):
         area, module = spec["area"], Path(spec["module"])
+        if (area == "figures" or spec.get("kind") == "figure") and spec["suffix"].lower() != ".png":
+            raise ValueError("图片输出只允许PNG。")
+        if spec.get("kind") == "regression_table" and spec["suffix"].lower() != ".doc":
+            raise ValueError("回归表输出只允许DOC。")
         if module.is_absolute() or ".." in module.parts or not (self.root / "code" / module).is_dir():
             raise ValueError(f"产物模块必须对应实际code目录：{module}")
         name = f"{spec['stem']}_{self.task}_{self.version}{spec['suffix']}"

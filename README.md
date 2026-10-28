@@ -36,15 +36,15 @@
 
 示例：`data_intermeidate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta`。
 
-outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.txt`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
+outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.doc`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 
-图表语句放在对应分析代码中，回归后立即outreg2、绘图后立即graph export。当前示例产物路径由tasks.json统一登记并通过宏传给Stata。内部QA留code/90_qa，生产入口独立；公开包用`python3 export_replication.py`导出，移除内部QA和其任务调用。规则见[OUTPUT_LAYOUT](management/OUTPUT_LAYOUT.md)。
+图表语句放在对应分析代码中，回归后立即outreg2、绘图后立即graph export。新图片固定输出PNG，新回归表固定输出DOC；outreg2的临时TXT在同一张表全部列导出后删除。当前示例产物路径由tasks.json统一登记并通过宏传给Stata。内部QA留code/90_qa，生产入口独立；公开包用`python3 export_replication.py`导出，移除内部QA和其任务调用。规则见[OUTPUT_LAYOUT](management/OUTPUT_LAYOUT.md)。
 
 ## 服务器与维护
 
 本机与服务器使用相同扁平目录设计。相关代码变更后先运行`python3 server_sync.py plan`列离线差异，获得项目负责人对本次同步的同意后才连接/同步；远端核验后登记完成。该工具不建立网络连接。详见[SERVER_SYNC](management/SERVER_SYNC.md)。
 
-每次任务结束和每周检查：提醒清理确认无用的临时txt、废弃输出和无保留依赖的重复文件，列具体路径和可删依据。正式表格txt、有效日志和复现依赖按用途识别；不因扩展名直接删除。禁止新生成随机后缀文件夹。
+每次任务结束和每周检查：提醒清理确认无用的临时txt、废弃输出和无保留依赖的重复文件，列具体路径和可删依据。正式DOC表格、有效日志和复现依赖按用途识别；不因扩展名直接删除。禁止新生成随机后缀文件夹。
 
 管理说明在management，思考报告在research_notes，正式稿在writing，核心对话在ai_records。新项目从[NEW_PROJECT](management/NEW_PROJECT.md)启动；当前正式任务仍未接入，不能将模板历史PASS当成研究成果。
 
@@ -87,9 +87,9 @@ Raw and intermediate data are ignored by Git, apart from the included synthetic 
 
 ### Analysis and outputs
 
-The demo entry point runs setup, cleaning, analysis-data construction, and regression stages in order. Formal data preparation and estimation use Stata. Ordinary regressions are written explicitly and followed immediately by `outreg2`; tables and figures are exported in the relevant analysis scripts.
+The demo entry point runs setup, cleaning, analysis-data construction, and regression stages in order. Formal data preparation and estimation use Stata. Ordinary regressions are written explicitly and followed immediately by `outreg2`; tables and figures are exported in the relevant analysis scripts. New figures are PNG only and new regression tables are DOC only.
 
-Outputs are organized by type first: `outputs/tables/`, `figures/`, `logs/`, `estimates/`, `samples/`, `qa/`, `provenance/`, and `runs/`, followed by the code module. Generated filenames contain a date and edition such as `main_table_demo_20261027_v01.txt`; no random-suffix version directories are created. Intermediate and analysis directories mirror the complete relative directory tree under `code/`. Repeated runs advance the edition and refuse overwrites, including when the clone already contains a versioned analysis file. See the [output layout](management/OUTPUT_LAYOUT.md).
+Outputs are organized by type first: `outputs/tables/`, `figures/`, `logs/`, `estimates/`, `samples/`, `qa/`, `provenance/`, and `runs/`, followed by the code module. Generated filenames contain a date and edition such as `main_table_demo_20261027_v01.doc`; no random-suffix version directories are created. Intermediate and analysis directories mirror the complete relative directory tree under `code/`. Repeated runs advance the edition and refuse overwrites, including when the clone already contains a versioned analysis file. See the [output layout](management/OUTPUT_LAYOUT.md).
 
 Internal QA is invoked separately by the task configuration and is not required by the production entry point. `python3 export_replication.py` builds a local replication archive that excludes internal QA and records `qa_status=NOT_RUN`; it does not publish or upload the archive.
 
@@ -107,4 +107,4 @@ Local and server projects use the same directory layout, while absolute paths ma
 
 Use `--date YYYYMMDD --edition N` only to request an unused edition. Default editions increase automatically. The top-level code follows data preparation, main regressions, robustness, mechanisms, and extensions; data preparation contains cleaning and analysis-data construction submodules. Table and figure export commands remain in the relevant analysis scripts.
 
-After a task and during a configured weekly check, list unused temporary text files, superseded outputs, and unreferenced duplicates. Retain required results, estimation samples, formal table `.txt` files, logs, and reproducibility evidence according to purpose. Cleanup candidates require explicit scope and authorization; no automatic deletion is implemented. This repository does not install a personal reminder automatically.
+After a task and during a configured weekly check, list unused temporary text files, superseded outputs, and unreferenced duplicates. Retain required DOC tables, estimation samples, logs, and reproducibility evidence according to purpose. Cleanup candidates require explicit scope and authorization; no automatic deletion is implemented. This repository does not install a personal reminder automatically.

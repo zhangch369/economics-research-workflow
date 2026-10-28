@@ -42,8 +42,8 @@ flowchart LR
 
 ```text
 outputs/
-├── tables/02_main_regressions/main_table_demo_20261027_v01.txt
-├── figures/02_main_regressions/main_figure_demo_20261027_v01.pdf
+├── tables/02_main_regressions/main_table_demo_20261027_v01.doc
+├── figures/02_main_regressions/main_figure_demo_20261027_v01.png
 ├── logs/02_main_regressions/analysis_demo_20261027_v01.log
 ├── estimates/、samples/、qa/         各按code模块分类、文件日期版次
 ├── provenance/                     对应版次来源快照
@@ -146,3 +146,5 @@ management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown
 ## 当前分类与命名规则
 
 DATA_LAYOUT和OUTPUT_LAYOUT为当前有效布局：数据逐级镜像code；outputs类型优先；版本直接标文件名YYYYMMDD_vNN，不新建随机后缀目录。每次结束/每周检查提醒清理完全无用的临时txt和废弃产物，保留正式结果与复现依赖；旧的随机目录说明仅属于历史设计，不能用于新任务。
+
+新生成的图片固定PNG，新回归表固定DOC；outreg2使用word选项，同一张表全部列完成后清理精确同名的临时TXT。日志、QA文本和历史表图按用途保留。

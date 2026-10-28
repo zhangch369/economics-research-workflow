@@ -29,3 +29,5 @@
 首次配置输出时读取 OUTPUT_LAYOUT.md，明确日志、研究表格与图片的独立路径。
 
 目录配置采用DATA_LAYOUT和OUTPUT_LAYOUT：数据逐级对应code，outputs类型优先，文件日期版次；不要沿用历史随机目录。每次任务结束列清理候选，不用临时txt堆积代替正式记录。
+
+图表格式固定：图片只输出PNG、回归表只输出DOC，任务产物登记kind=figure或regression_table。回归后立即outreg2，使用word选项生成DOC；同一张表全部列导出后清理精确同名的outreg2临时TXT。日志和QA文本不受此限制。

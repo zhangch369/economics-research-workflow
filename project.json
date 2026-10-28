@@ -44,10 +44,10 @@
     "dependency_lock": "not frozen; actual versions recorded in each Stata log",
     "template_validation": {
       "layout_version": 4,
-      "date": "2026-10-27",
+      "date": "2026-10-28",
       "status": "PASS",
-      "scope": "clean public template copy: synthetic demo, six layout checks, data/sample/full b-V comparison",
-      "evidence": "management/VALIDATION_20261027_v01.md",
+      "scope": "clean public template copy: PNG/DOC formats, synthetic demo, layout/data/sample/full b-V comparison",
+      "evidence": "management/VALIDATION_20261028_v01.md",
       "real_server_connected": false
     }
   },
@@ -91,7 +91,13 @@
     "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory.",
     "version_naming": "YYYYMMDD_vNN directly on generated filenames; no random-suffix folders",
     "data_directory_mirror": "data_intermeidate and data_analysis mirror code directories recursively",
-    "cleanup_reminders": "after tasks and weekly: unnecessary temporary txt, superseded outputs, and unreferenced duplicates; preserve required evidence"
+    "cleanup_reminders": "after tasks and weekly: unnecessary temporary txt, superseded outputs, and unreferenced duplicates; preserve required evidence",
+    "output_formats": {
+      "figures": "png_only",
+      "regression_tables": "doc_only",
+      "outreg2_txt": "temporary only; delete exact sidecar after all table columns are exported",
+      "historical_outputs": "preserve until explicitly confirmed obsolete"
+    }
   },
   "structure": {
     "registered_subprojects": [],

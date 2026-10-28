@@ -70,6 +70,10 @@ management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化
 
 ## 输出与数据分类（用户当前要求）
 
-遵循management/OUTPUT_LAYOUT.md和DATA_LAYOUT.md。data_intermeidate和data_analysis逐级镜像code；不以运行时间或随机串分类。outputs以tables/figures/logs等用途为一级目录、code模块为二级，日期和版次直接标在文件名，例如main_table_demo_20261027_v01.txt。同一任务同日递增版次，已有版次不覆盖；禁止新建随机后缀文件夹。代码与配置源文件保留原名，内容指纹只写入元信息，不作为版本名。
+遵循management/OUTPUT_LAYOUT.md和DATA_LAYOUT.md。data_intermeidate和data_analysis逐级镜像code；不以运行时间或随机串分类。outputs以tables/figures/logs等用途为一级目录、code模块为二级，日期和版次直接标在文件名，例如main_table_demo_20261027_v01.doc。同一任务同日递增版次，已有版次不覆盖；禁止新建随机后缀文件夹。代码与配置源文件保留原名，内容指纹只写入元信息，不作为版本名。
 
 图表导出仍在对应分析代码中。每次任务结束和每周检查要列出完全不需要的临时txt、已废弃输出和无保留依赖的重复文件，给出可删依据、具体路径与授权状态；正式outreg2表格txt、有效日志和复现依赖按内容识别，不能仅凭扩展名删除。已明确获准删除的清单及时清理，其余候选提醒用户决定。
+
+## 图表格式（当前要求）
+
+新生成的图片只输出PNG，不额外导出PDF、GPH、SVG或JPG；新回归表只输出DOC，不额外保留TXT、Excel或TeX版本。回归后立即outreg2 using对应DOC路径并指定word；同一表的全部列完成后，清理本次outreg2精确同名的临时TXT，不在追加列之间删除。日志和QA文本不受回归表格式限制，历史表图未经确认不批量删除。论文/汇报源稿及其PDF成品属于writing，不是额外图片格式。
