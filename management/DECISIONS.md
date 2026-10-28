@@ -4,7 +4,7 @@
 |---|---|---|---|---|
 |待填写|例如变更缺失处理，不以显著性为依据|待填写|待填写|待填写|
 
-|2026-10-27|用户要求外置三层数据|项目内 data → 同级 data_raw/data_intermeidate/data_analysis|原始和中间不入 Git，分析数据入 Git|本聊天用户明确要求|
+|2026-10-27|用户要求外置三层数据|项目内 data → 同级 data_raw/data_intermediate/data_analysis|原始和中间不入 Git，分析数据入 Git|本聊天用户明确要求|
 |2026-10-27|用户纠正 QA 位置与分发范围|QA 留在 code/90_qa；对外生产包排除|生产入口独立，内部 QA 单独调用|本聊天用户纠正|
 |2026-10-27|用户要求按阶段与用途编号|01_clean、02_analysis_data、03_regressions 等|文件名也说明类型/用途|本聊天用户明确要求|
 |2026-10-27|用户要求重新区分管理说明与思考报告|docs/docx → management/research_notes|论文与汇报仍放 writing|用户要求改名；具体新名为实现选择|

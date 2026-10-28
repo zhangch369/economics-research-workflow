@@ -6,7 +6,7 @@
 
 阶段：①已完成NUSTP只读核对；②已完成分类、命名与入口实现；③重复运行/防覆盖、镜像一致、数值、公开包、同步计划验证通过。
 
-验收：无随机后缀作为版本名；输出文件含YYYYMMDD_vNN；data_intermeidate和data_analysis的目录与code逐级相同；tables/figures/logs为outputs一级目录；模型和样本保持合成示例原设定；公开包无内部QA仍能运行。
+验收：无随机后缀作为版本名；输出文件含YYYYMMDD_vNN；data_intermediate和data_analysis的目录与code逐级相同；tables/figures/logs为outputs一级目录；模型和样本保持合成示例原设定；公开包无内部QA仍能运行。
 
 预计20–25分钟，目录与打包检查失败则顺延。单agent执行，避免共享登记表写入冲突。无研究规格待决定。
 

@@ -4,7 +4,7 @@ __pycache__/
 .env
 *.env
 /data_raw/
-/data_intermeidate/
+/data_intermediate/*
 /config/machine.local.json
 /config/server.local.json
 /outputs/
@@ -12,3 +12,5 @@ __pycache__/
 /scratch/
 # data_analysis/ 与 code/90_qa/ 随内部项目纳入 Git。
 # 对外复现包另由导出器排除内部 QA、聊天、笔记和私有配置。
+
+!/data_intermediate/.gitkeep

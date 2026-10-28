@@ -1,6 +1,6 @@
 # 服务器协作：同一目录设计，代码变更先审批后同步
 
-如果项目有服务器运行的代码，本机与服务器使用相同根目录结构：code、config、data_raw、data_intermeidate、data_analysis、outputs、management、research_notes、writing、ai_records 等同级；不增加 project/ 包裹层。绝对根路径和软件安装位置可以不同，由各自私有机器配置提供。数据内容按任务需要传输，数据版本与相对路径要对应。
+如果项目有服务器运行的代码，本机与服务器使用相同根目录结构：code、config、data_raw、data_intermediate、data_analysis、outputs、management、research_notes、writing、ai_records 等同级；不增加 project/ 包裹层。绝对根路径和软件安装位置可以不同，由各自私有机器配置提供。数据内容按任务需要传输，数据版本与相对路径要对应。
 
 ## 每次本机代码变更后的流程
 
