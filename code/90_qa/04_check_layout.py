@@ -34,11 +34,16 @@ def check(layout):
         command(workspace,['run.py','--task','demo','--profile','config/machine.mac.example.json'])
         file,record=last(workspace,'demo');assert record['status']=='PASS'
         return file,record
-    def mirror(workspace):
-        wanted={p.relative_to(workspace/'code').as_posix() for p in (workspace/'code').rglob('*') if p.is_dir() and '__pycache__' not in p.parts and not p.name.startswith('.')}
+    def check_data_directories(workspace):
+        tasks=json.loads((workspace/'config/tasks.json').read_text())
+        wanted={area:set() for area in ('data_intermediate','data_analysis')}
+        for task in tasks.values():
+            for spec in task.get('artifacts',{}).values():
+                if spec.get('area')=='intermediate':wanted['data_intermediate'].add(Path(spec['data_module']).as_posix())
+                if spec.get('area')=='analysis':wanted['data_analysis'].add(Path(spec['data_module']).as_posix())
         for layer in ['data_intermediate','data_analysis']:
             actual={p.relative_to(workspace/layer).as_posix() for p in (workspace/layer).rglob('*') if p.is_dir()}
-            assert actual==wanted,(layer,actual^wanted)
+            assert actual==wanted[layer],(layer,actual^wanted[layer])
     _,base=last(ROOT,'demo');assert base['qa_status']=='PASS'
     originals={name:digest(Path(path)) for name,path in base['artifacts'].items()}
     _,again=run(ROOT);assert again['edition']>base['edition'] and again['date']==base['date']
@@ -46,7 +51,7 @@ def check(layout):
     result=command(ROOT,['run.py','--task','demo','--profile','config/machine.mac.example.json','--date',base['date'],'--edition',str(base['edition'])],False)
     assert result.returncode!=0 and originals=={name:digest(Path(path)) for name,path in base['artifacts'].items()}
     checks.append({'check':'repeat_increments_readable_edition_and_refuses_overwrite','status':'PASS','first':base['version'],'second':again['version']})
-    mirror(ROOT)
+    check_data_directories(ROOT)
     for category in ['tables','figures','logs','estimates','samples','qa','runs']:
         for file in (ROOT/'outputs'/category).rglob('*'):
             if file.is_file():assert re.search(r'_\d{8}_v\d+\.',file.name),str(file)
@@ -62,10 +67,10 @@ def check(layout):
         except ValueError:pass
         else:raise AssertionError('未拒绝不符合规则的图表格式')
     checks.append({'check':'png_images_doc_regression_tables_and_no_txt_sidecars','status':'PASS'})
-    checks.append({'check':'mirrored_data_directories_and_type_first_dated_artifacts','status':'PASS'})
+    checks.append({'check':'registered_flat_data_directories_and_type_first_dated_artifacts','status':'PASS'})
     moved=work/'内部迁移副本'
     shutil.copytree(ROOT,moved,ignore=shutil.ignore_patterns('outputs','releases','data_intermediate','data_analysis','__pycache__','.git'))
-    _,moved_record=run(moved);assert moved_record['qa_status']=='PASS';mirror(moved)
+    _,moved_record=run(moved);assert moved_record['qa_status']=='PASS';check_data_directories(moved)
     subprocess.run(['git','init','-q',str(moved)],check=True)
     for rel,wanted in [('data_raw/private_input.csv',0),(str(Path(moved_record['artifacts']['PANEL_FILE']).relative_to(moved)),0),(str(Path(moved_record['artifacts']['ANALYSIS_FILE']).relative_to(moved)),1)]:
         assert subprocess.run(['git','-C',str(moved),'check-ignore','--quiet',rel]).returncode==wanted
@@ -79,13 +84,13 @@ def check(layout):
     public=public/'economics_workspace';_,public_record=run(public)
     reserved={re.search(r'(\d{8}_v\d+)\.',p).group(1) for p in json.loads((ROOT/'config/replication_export.json').read_text())['analysis_files']}
     assert public_record['qa_status']=='NOT_RUN' and public_record['version'] not in reserved
-    assert not (public/'code/90_qa').exists();mirror(public)
+    assert not (public/'code/90_qa').exists();check_data_directories(public)
     checks.append({'check':'public_package_runs_without_qa_and_preserves_included_analysis_edition','status':'PASS','archive':str(archive),'record':str(last(public,'demo')[0])})
     command(ROOT,['server_sync.py','plan']);_,plan=last(ROOT,'server_sync_plan')
     assert plan['status']=='NOT_APPLICABLE' and not plan['remote_connection_made'] and re.fullmatch(r'\d{8}_v\d+',plan['version'])
     checks.append({'check':'server_plan_uses_readable_type_first_paths_without_connection','status':'PASS'})
     # 在Stata重新载入历史、当前、迁移及公开数据并逐项比较；完整b/V也比较。
-    reference=ROOT/'data_analysis/01_data_preparation/02_analysis_data/firm_year_analysis_reference_20261027_v01.dta'
+    reference=ROOT/'data_analysis/02_analysis_data/firm_year_analysis_reference_20261027_v01.dta'
     statements=['version 18.0','set more off']
     for ref in [reference,Path(base['artifacts']['ANALYSIS_FILE'])]:
         statements += [f'use "{ref}", clear']

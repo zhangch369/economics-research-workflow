@@ -14,12 +14,14 @@
       "PANEL_FILE": {
         "area": "intermediate",
         "module": "01_data_preparation/01_clean",
+        "data_module": "01_clean",
         "stem": "firm_year_panel",
         "suffix": ".dta"
       },
       "ANALYSIS_FILE": {
         "area": "analysis",
         "module": "01_data_preparation/02_analysis_data",
+        "data_module": "02_analysis_data",
         "stem": "firm_year_analysis",
         "suffix": ".dta"
       },

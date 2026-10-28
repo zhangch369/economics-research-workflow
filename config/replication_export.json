@@ -7,6 +7,6 @@
     "demo/v01/firm_year.csv"
   ],
   "analysis_files": [
-    "01_data_preparation/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta"
+    "02_analysis_data/firm_year_analysis_demo_20261027_v01.dta"
   ]
 }

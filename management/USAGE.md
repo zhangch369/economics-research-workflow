@@ -121,6 +121,6 @@ Fill in [the new-project prompt](../ai_records/NEW_PROJECT.txt) and give it to a
 
 ## 日期版次与目录 / Dates, editions, and directories
 
-数据目录逐级镜像code；outputs先按tables/figures/logs等分类，再按模块。输出文件名直接带YYYYMMDD_vNN，无随机后缀目录。包内已有分析v01时，第一次运行会自动选用v02，保留已附带的分析文件。不要强制覆盖已有版次。
+数据产物在config/tasks.json中分别登记生产代码module和扁平数据目录data_module；默认中间数据在data_intermediate/01_clean，分析数据在data_analysis/02_analysis_data，不复制01_data_preparation父目录。outputs先按tables/figures/logs等分类，再按模块。输出文件名直接带YYYYMMDD_vNN，无随机后缀目录。包内已有分析v01时，第一次运行会自动选用v02，保留已附带的分析文件。不要强制覆盖已有版次。
 
-Intermediate and analysis directories mirror `code/` recursively. Output filenames carry `YYYYMMDD_vNN` under type-first output directories. If an analysis edition is already bundled, the next run selects an unused edition. Exported replication archives exclude internal QA; the workflow template itself retains the internal QA examples.
+Each data artifact records its producing code `module` and a flat `data_module`, such as `01_clean` or `02_analysis_data`. Output filenames carry `YYYYMMDD_vNN` under type-first output directories. If an analysis edition is already bundled, the next run selects an unused edition. Exported replication archives exclude internal QA; the workflow template itself retains the internal QA examples.

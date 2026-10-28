@@ -6,6 +6,7 @@ from pathlib import Path
 
 TZ = timezone(timedelta(hours=8))
 CATEGORIES = ("tables", "figures", "logs", "estimates", "samples", "qa", "provenance", "runs")
+DATA_AREAS = ("intermediate", "analysis")
 
 
 def now():
@@ -28,11 +29,31 @@ def code_directories(root):
                   if p.is_dir() and "__pycache__" not in p.parts and not p.name.startswith("."))
 
 
-def mirror_data_directories(root, data_roots):
-    directories = code_directories(root)
-    for key in ("intermediate", "analysis"):
+def data_module(spec):
+    area = spec["area"]
+    if area not in DATA_AREAS:
+        raise ValueError(f"不是派生数据产物：{area}")
+    value = spec.get("data_module")
+    if not value:
+        raise ValueError("中间和分析数据产物必须显式登记data_module。")
+    rel = Path(value)
+    if rel.is_absolute() or ".." in rel.parts:
+        raise ValueError("data_module必须是项目数据根目录内的相对路径。")
+    return rel
+
+
+def registered_data_directories(task):
+    directories = {area: set() for area in DATA_AREAS}
+    for spec in task.get("artifacts", {}).values():
+        if spec.get("area") in DATA_AREAS:
+            directories[spec["area"]].add(data_module(spec))
+    return directories
+
+
+def mirror_data_directories(data_roots, task):
+    for area, directories in registered_data_directories(task).items():
         for rel in directories:
-            (data_roots[key] / rel).mkdir(parents=True, exist_ok=True)
+            (data_roots[area] / rel).mkdir(parents=True, exist_ok=True)
 
 
 class RunLayout:
@@ -102,8 +123,8 @@ class RunLayout:
         if module.is_absolute() or ".." in module.parts or not (self.root / "code" / module).is_dir():
             raise ValueError(f"产物模块必须对应实际code目录：{module}")
         name = f"{spec['stem']}_{self.task}_{self.version}{spec['suffix']}"
-        if area in ("intermediate", "analysis"):
-            directory = data_roots[area] / module
+        if area in DATA_AREAS:
+            directory = data_roots[area] / data_module(spec)
             directory.mkdir(parents=True, exist_ok=True)
             return directory / name
         return self.directory(area, module) / name

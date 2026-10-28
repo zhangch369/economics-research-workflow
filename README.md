@@ -13,8 +13,8 @@
 项目根目录/
 ├── code/                    00_setup；01_data_preparation；02_main_regressions；03_robustness；04_mechanisms；05_extensions；90_qa
 ├── data_raw/                来源原件，不入Git
-├── data_intermediate/       目录逐级镜像code，不入Git
-├── data_analysis/           目录逐级镜像code，纳入Git
+├── data_intermediate/       按清洗阶段扁平归档，如01_clean，不入Git
+├── data_analysis/           按分析数据阶段归档，如02_analysis_data，纳入Git
 ├── outputs/                 tables、figures、logs、estimates、samples、qa、provenance、runs
 ├── config/                  任务、机器与服务器配置
 ├── management/              管理说明、状态、登记与决策
@@ -32,9 +32,9 @@
 
 ## 找数据、结果与版次
 
-数据目录逐级对应实际code目录，新增专题/研究线要一起镜像；同一数据由生产代码所在模块归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
+中间和分析数据不复制完整的code父目录。每个数据产物在`config/tasks.json`中用`module`登记生产代码路径，并用`data_module`指定扁平数据目录；同一数据只由生产阶段归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
 
-示例：`data_intermediate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta`。
+示例：`data_intermediate/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta`。
 
 outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.doc`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 
@@ -89,7 +89,7 @@ Raw and intermediate data are ignored by Git, apart from the included synthetic 
 
 The demo entry point runs setup, cleaning, analysis-data construction, and regression stages in order. Formal data preparation and estimation use Stata. Ordinary regressions are written explicitly and followed immediately by `outreg2`; tables and figures are exported in the relevant analysis scripts. New figures are PNG only and new regression tables are DOC only.
 
-Outputs are organized by type first: `outputs/tables/`, `figures/`, `logs/`, `estimates/`, `samples/`, `qa/`, `provenance/`, and `runs/`, followed by the code module. Generated filenames contain a date and edition such as `main_table_demo_20261027_v01.doc`; no random-suffix version directories are created. Intermediate and analysis directories mirror the complete relative directory tree under `code/`. Repeated runs advance the edition and refuse overwrites, including when the clone already contains a versioned analysis file. See the [output layout](management/OUTPUT_LAYOUT.md).
+Outputs are organized by type first: `outputs/tables/`, `figures/`, `logs/`, `estimates/`, `samples/`, `qa/`, `provenance/`, and `runs/`, followed by the code module. Generated filenames contain a date and edition such as `main_table_demo_20261027_v01.doc`; no random-suffix version directories are created. Each data artifact records a `module` for its producing code path and a flat `data_module` for its landing directory, such as `01_clean` or `02_analysis_data`. Repeated runs advance the edition and refuse overwrites. See the [data layout](management/DATA_LAYOUT.md) and [output layout](management/OUTPUT_LAYOUT.md).
 
 Internal QA is invoked separately by the task configuration and is not required by the production entry point. `python3 export_replication.py` builds a local replication archive that excludes internal QA and records `qa_status=NOT_RUN`; it does not publish or upload the archive.
 

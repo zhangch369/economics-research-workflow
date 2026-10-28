@@ -5,7 +5,7 @@ import hashlib
 import json
 import zipfile
 from pathlib import Path
-from project_layout import CATEGORIES, RunLayout, code_directories, write_json
+from project_layout import CATEGORIES, RunLayout, registered_data_directories, write_json
 
 ROOT=Path(__file__).resolve().parent
 
@@ -45,10 +45,13 @@ def main():
             z.writestr('economics_workspace/AGENTS.md','# AI复现入口\n\n读README和config/tasks.json，运行登记的生产任务。输出类型优先、文件用日期和版次；数据目录对应code。内部90_qa不在本包，qa_status=NOT_RUN不能冒充内部QA已通过。\n')
             z.writestr('economics_workspace/project.json',json.dumps({'schema_version':4,'package_type':'public_replication','scope':config['scope'],'command':'python3 run.py --task demo','internal_qa_included':False,'analysis_files':config['analysis_files'],'output_layout':'type/module/filename_YYYYMMDD_vNN'},ensure_ascii=False,indent=2))
             z.writestr(f'economics_workspace/EXPORT_MANIFEST_{layout.version}.json',json.dumps({'scope':config['scope'],'version':layout.version,'internal_qa_included':False,'source_files':manifest},ensure_ascii=False,indent=2))
-            for rel in code_directories(ROOT):
-                if '90_qa' in rel.parts:continue
-                for layer in ('data_intermediate','data_analysis'):
-                    z.writestr(f'economics_workspace/{layer}/{rel.as_posix()}/','')
+            data_directories={area:set() for area in ('intermediate','analysis')}
+            for task in public_tasks.values():
+                for area,directories in registered_data_directories(task).items():
+                    data_directories[area].update(directories)
+            for area,directories in data_directories.items():
+                for rel in sorted(directories):
+                    z.writestr(f'economics_workspace/data_{area}/{rel.as_posix()}/','')
             for category in CATEGORIES:
                 z.writestr(f'economics_workspace/outputs/{category}/','')
         result={'status':'PASS','date':layout.date,'edition':layout.edition,'version':layout.version,'archive':str(archive),'files':len(files),'internal_qa_included':False}
