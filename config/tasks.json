@@ -7,7 +7,7 @@
     "inputs": [
       {
         "area": "raw",
-        "path": "demo/v1/firm_year.csv"
+        "path": "demo/v01/firm_year.csv"
       }
     ],
     "artifacts": {
@@ -19,7 +19,7 @@
       },
       "ANALYSIS_FILE": {
         "area": "analysis",
-        "module": "01_data_preparation/02_build",
+        "module": "01_data_preparation/02_analysis_data",
         "stem": "firm_year_analysis",
         "suffix": ".dta"
       },

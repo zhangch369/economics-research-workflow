@@ -85,7 +85,7 @@ def check(layout):
     assert plan['status']=='NOT_APPLICABLE' and not plan['remote_connection_made'] and re.fullmatch(r'\d{8}_v\d+',plan['version'])
     checks.append({'check':'server_plan_uses_readable_type_first_paths_without_connection','status':'PASS'})
     # 在Stata重新载入历史、当前、迁移及公开数据并逐项比较；完整b/V也比较。
-    reference=ROOT/'data_analysis/01_data_preparation/02_build/firm_year_analysis_reference_20261027_v01.dta'
+    reference=ROOT/'data_analysis/01_data_preparation/02_analysis_data/firm_year_analysis_reference_20261027_v01.dta'
     statements=['version 18.0','set more off']
     for ref in [reference,Path(base['artifacts']['ANALYSIS_FILE'])]:
         statements += [f'use "{ref}", clear']

@@ -34,7 +34,7 @@
 
 数据目录逐级对应实际code目录，新增专题/研究线要一起镜像；同一数据由生产代码所在模块归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
 
-示例：`data_intermediate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta`。
+示例：`data_intermediate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta`。
 
 outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.doc`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 

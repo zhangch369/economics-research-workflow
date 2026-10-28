@@ -52,7 +52,7 @@ python3 run.py --task demo
 
 ### 5. 接入正式 Stata 流程
 
-1. 在 `code/01_data_preparation/01_clean/`、`code/01_data_preparation/02_build/`、`code/02_main_regressions/` 等目录编写自己的 do-file，按阶段保存中间与分析数据。普通回归逐列显式写出，并紧接 `outreg2` 输出。
+1. 在 `code/01_data_preparation/01_clean/`、`code/01_data_preparation/02_analysis_data/`、`code/02_main_regressions/` 等目录编写自己的 do-file，按阶段保存中间与分析数据。普通回归逐列显式写出，并紧接 `outreg2` 输出。
 2. 修改 `code/00_run_formal.do`，替换当前的占位报错，明确列出已审核的阶段执行顺序。默认占位文件会主动报错，不能直接作为正式入口。
 3. 在 `config/tasks.json` 的 `formal` 项填写经确认的 `scope`、`entry`、`output_module`、`inputs`、`artifacts` 和 `expected`；需要内部 QA 时设置 `qa_entry`、`qa_artifacts` 与 `qa_expected`。`entry` 和 QA 入口是相对于 `code/` 的路径，输入用 `area/path` 登记，产物用 `area/module/stem/suffix` 指定用途、对应代码模块、文件主体与扩展名；expected列出产物宏名。确认输入、产物和验收条件后，再把 `enabled` 改为 `true`。
 4. 从项目根目录执行 `python3 run.py --task formal`，再核对本次运行的日志、实际样本、估计与 QA。

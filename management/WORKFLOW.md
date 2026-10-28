@@ -129,7 +129,7 @@ Stata 官方文档说明批处理与日志行为、Windows 的工作目录设置
 
 ## 当前目录命名补充
 
-management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 参照示例研究项目采用 00_setup→01_data_preparation（内分01_clean/02_build）→02_main_regressions→03_robustness→04_mechanisms→05_extensions；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
+management/ 是管理说明与登记；research_notes/ 是 AI 整理的 Markdown 思考报告；writing/ 是论文与正式汇报稿。code 参照示例研究项目采用 00_setup→01_data_preparation（内分01_clean/02_analysis_data）→02_main_regressions→03_robustness→04_mechanisms→05_extensions；图表导出语句直接写在对应分析脚本中，生成文件保存到本次 outputs/ 下的 tables/ 或 figures/，不单设图表导出阶段。内部 code/90_qa 不进入对外复现包。阶段内文件也以数字开头，标明数据类型与用途。
 
 ## 服务器代码协作
 

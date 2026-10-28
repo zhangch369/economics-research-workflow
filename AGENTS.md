@@ -4,7 +4,7 @@
 
 项目根目录同时是 Git 根目录。code/、config/、management/、research_notes/、writing/、ai_records/ 与 data_raw/、data_intermediate/、data_analysis/ 直接平级，不增加 project/ 包裹层。原始和中间数据不入 Git，data_analysis/ 纳入 Git；机器配置分别设置三个数据根路径。
 
-code/ 按 00_setup、01_data_preparation（内分01_clean/02_build）、02_main_regressions、03_robustness、04_mechanisms、05_extensions 分类；阶段内的文件也编号并注明数据类型和用途。图表导出语句直接写在对应分析脚本中：回归后立即 outreg2，绘图后立即 graph export，不单设图表导出阶段；生成的表图仍保存到本次 outputs/ 对应目录。纯内部检查放 code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
+code/ 按 00_setup、01_data_preparation（内分01_clean/02_analysis_data）、02_main_regressions、03_robustness、04_mechanisms、05_extensions 分类；阶段内的文件也编号并注明数据类型和用途。图表导出语句直接写在对应分析脚本中：回归后立即 outreg2，绘图后立即 graph export，不单设图表导出阶段；生成的表图仍保存到本次 outputs/ 对应目录。纯内部检查放 code/90_qa/，随内部项目管理，对外复现包排除；生产入口不得依赖它。
 
 management/ 放项目管理说明与登记；research_notes/ 放 AI 的结构化思考报告，通常为 Markdown；writing/ 放论文与正式汇报稿；ai_records/ 放核心聊天与恢复卡。不要另建 docs/ 或 docx/ 作为含混的并列目录。
 

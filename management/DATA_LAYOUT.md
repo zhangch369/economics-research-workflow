@@ -5,8 +5,8 @@
 ```text
 code/01_data_preparation/01_clean/01_firm_year_clean.do
   → data_intermediate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta
-code/01_data_preparation/02_build/01_firm_year_analysis.do
-  → data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta
+code/01_data_preparation/02_analysis_data/01_firm_year_analysis.do
+  → data_analysis/01_data_preparation/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta
 code/02_main_regressions/01_main.do
   → 读取上述冻结分析文件；估计/实际样本写outputs/estimates和outputs/samples
 ```

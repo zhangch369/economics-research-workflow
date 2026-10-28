@@ -46,8 +46,8 @@
       "layout_version": 4,
       "date": "2026-10-28",
       "status": "PASS",
-      "scope": "clean public template copy: corrected data_intermediate path, PNG/DOC formats, synthetic demo, layout/data/sample/full b-V comparison",
-      "evidence": "management/VALIDATION_20261028_v02.md",
+      "scope": "clean public template copy: corrected data paths and analysis-stage name, PNG/DOC formats, synthetic demo, layout/data/sample/full b-V comparison",
+      "evidence": "management/VALIDATION_20261028_v03.md",
       "real_server_connected": false
     }
   },
