@@ -44,6 +44,14 @@ def data_module(spec):
 
 def registered_data_directories(task):
     directories = {area: set() for area in DATA_AREAS}
+    for area, values in task.get("data_directories", {}).items():
+        if area not in DATA_AREAS:
+            raise ValueError(f"未知数据层：{area}")
+        for value in values:
+            rel = Path(value)
+            if rel.is_absolute() or ".." in rel.parts:
+                raise ValueError("数据目录必须是数据根目录内的相对路径。")
+            directories[area].add(rel)
     for spec in task.get("artifacts", {}).values():
         if spec.get("area") in DATA_AREAS:
             directories[spec["area"]].add(data_module(spec))

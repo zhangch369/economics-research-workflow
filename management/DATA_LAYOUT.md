@@ -9,25 +9,29 @@ code/01_data_preparation/01_clean/01_firm_year_clean.do
 code/01_data_preparation/02_analysis_data/01_firm_year_analysis.do
   → data_analysis/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta
 
+data_analysis/01_clean/
+  → 项目级清洗分析输入的保留目录
+
 data_raw/demo/v01/firm_year.csv
   → 原始合成输入，按来源和版本留存
 ```
 
 ## 显式映射
 
-`config/tasks.json`中的每个中间或分析产物同时登记：
+`config/tasks.json`在任务级`data_directories`登记本任务允许存在的数据目录；每个中间或分析产物另登记：
 
 - `module`：生产该数据的code相对目录，用于验证生产代码真实存在。
 - `data_module`：数据根目录下的扁平相对目录，用于决定实际落盘位置。
 
 合成任务映射：
 
-|产物|code模块|数据根|data_module|
+|目录或产物|code模块|数据根|data_module|
 |---|---|---|---|
 |中间面板|`01_data_preparation/01_clean`|`data_intermediate`|`01_clean`|
+|分析层清洗输入|`01_data_preparation/01_clean`|`data_analysis`|`01_clean`|
 |分析数据|`01_data_preparation/02_analysis_data`|`data_analysis`|`02_analysis_data`|
 
-运行器只创建任务实际登记的数据目录，不再根据完整code目录树批量创建空镜像目录。
+运行器只创建任务实际登记的`data_directories`和数据产物`data_module`，不再根据完整code目录树批量创建空镜像目录。`data_analysis/01_clean/`当前用`.gitkeep`保留目录，不复制合成fixture；真实项目需要时可登记项目级清洗分析输入。
 
 ## 研究线与版本
 

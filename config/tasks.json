@@ -4,6 +4,15 @@
     "scope": "synthetic_demo_only",
     "entry": "00_run_demo.do",
     "output_module": "02_main_regressions",
+    "data_directories": {
+      "intermediate": [
+        "01_clean"
+      ],
+      "analysis": [
+        "01_clean",
+        "02_analysis_data"
+      ]
+    },
     "inputs": [
       {
         "area": "raw",

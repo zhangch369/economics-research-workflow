@@ -14,7 +14,7 @@
 ├── code/                    00_setup；01_data_preparation；02_main_regressions；03_robustness；04_mechanisms；05_extensions；90_qa
 ├── data_raw/                来源原件，不入Git
 ├── data_intermediate/       按清洗阶段扁平归档，如01_clean，不入Git
-├── data_analysis/           按分析数据阶段归档，如02_analysis_data，纳入Git
+├── data_analysis/           含01_clean与02_analysis_data两个编号目录，纳入Git
 ├── outputs/                 tables、figures、logs、estimates、samples、qa、provenance、runs
 ├── config/                  任务、机器与服务器配置
 ├── management/              管理说明、状态、登记与决策
@@ -34,7 +34,7 @@
 
 中间和分析数据不复制完整的code父目录。每个数据产物在`config/tasks.json`中用`module`登记生产代码路径，并用`data_module`指定扁平数据目录；同一数据只由生产阶段归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
 
-示例：`data_intermediate/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta`。
+示例：`data_intermediate/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/02_analysis_data/firm_year_analysis_demo_20261027_v01.dta`。`data_analysis/01_clean/`为项目级清洗分析输入保留目录。
 
 outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.doc`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 

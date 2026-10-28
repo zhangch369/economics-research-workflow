@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[2]
 sys.path.insert(0,str(ROOT))
-from project_layout import RunLayout, write_json
+from project_layout import RunLayout, registered_data_directories, write_json
 
 
 def digest(path):return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -38,9 +38,9 @@ def check(layout):
         tasks=json.loads((workspace/'config/tasks.json').read_text())
         wanted={area:set() for area in ('data_intermediate','data_analysis')}
         for task in tasks.values():
-            for spec in task.get('artifacts',{}).values():
-                if spec.get('area')=='intermediate':wanted['data_intermediate'].add(Path(spec['data_module']).as_posix())
-                if spec.get('area')=='analysis':wanted['data_analysis'].add(Path(spec['data_module']).as_posix())
+            registered=registered_data_directories(task)
+            for area,directories in registered.items():
+                wanted[f'data_{area}'].update(path.as_posix() for path in directories)
         for layer in ['data_intermediate','data_analysis']:
             actual={p.relative_to(workspace/layer).as_posix() for p in (workspace/layer).rglob('*') if p.is_dir()}
             assert actual==wanted[layer],(layer,actual^wanted[layer])

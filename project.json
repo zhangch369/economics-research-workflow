@@ -47,7 +47,7 @@
       "date": "2026-10-28",
       "status": "PASS",
       "scope": "flat registered data directories, corrected analysis-stage and raw snapshot names, PNG/DOC formats, synthetic demo, layout/data/sample/full b-V comparison",
-      "evidence": "management/VALIDATION_20261028_v04.md",
+      "evidence": "management/VALIDATION_20261028_v05.md",
       "real_server_connected": false
     }
   },
@@ -90,7 +90,7 @@
     "qa_distribution": "internal code/90_qa retained in internal Git; excluded from public replication package",
     "table_figure_export": "Export directly inside corresponding analysis scripts; save generated tables/figures under the current outputs run directory.",
     "version_naming": "YYYYMMDD_vNN directly on generated filenames; no random-suffix folders",
-    "data_directory_mapping": "Each intermediate or analysis artifact declares module for its producing code path and data_module for its flat data directory. Use data_intermediate/01_clean and data_analysis/02_analysis_data; do not repeat the 01_data_preparation parent.",
+    "data_directory_mapping": "Each task declares flat data directories and each intermediate or analysis artifact declares module plus data_module. Use data_intermediate/01_clean, data_analysis/01_clean, and data_analysis/02_analysis_data; do not repeat the 01_data_preparation parent.",
     "cleanup_reminders": "after tasks and weekly: unnecessary temporary txt, superseded outputs, and unreferenced duplicates; preserve required evidence",
     "output_formats": {
       "figures": "png_only",

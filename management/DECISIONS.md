@@ -8,3 +8,4 @@
 |2026-10-28|中间数据目录统一使用正确拼写`data_intermediate`；运行器、配置、QA和文档同步更新|
 |2026-10-28|分析数据阶段改名`02_analysis_data`；合成原始快照改名`demo/v01`，使名称表达用途并统一两位数版次|
 |2026-10-28|数据根目录不重复`01_data_preparation`父目录；任务用`module`登记生产代码，用`data_module`映射到`01_clean`或`02_analysis_data`|
+|2026-10-28|`data_analysis`下保留`01_clean`与`02_analysis_data`两个编号目录；01为项目级清洗输入预留，02存放最终分析数据|

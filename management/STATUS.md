@@ -3,9 +3,9 @@
 更新：2026-10-28。这是新项目工作流模板，正式研究数据尚未接入。代码按论文部分分类；派生数据通过`data_module`扁平归档，outputs类型优先，产物文件使用YYYYMMDD_vNN，不使用随机后缀目录。
 
 - 格式：新图片只输出PNG，新回归表只输出DOC；outreg2临时TXT在整张表完成后清理。
-- 数据目录：中间数据在`data_intermediate/01_clean/`；分析数据在`data_analysis/02_analysis_data/`；不在数据层重复`01_data_preparation`父目录。
+- 数据目录：中间数据在`data_intermediate/01_clean/`；分析数据层包含`data_analysis/01_clean/`和`data_analysis/02_analysis_data/`；不在数据层重复`01_data_preparation`父目录。
 - 合成原始快照：`data_raw/demo/v01/`，采用两位数版次名称。
-- 合成演示：392条分析观测、80家企业；最新完整验证见VALIDATION_20261028_v04.md。
+- 合成演示：392条分析观测、80家企业；最新完整验证见VALIDATION_20261028_v05.md。
 - 公开仓库仅保留模板、合成数据和空登记表，不含私人聊天/本机配置/真实研究数据。
 - 内部QA示例在code/90_qa；生成的对外复现包排除内部QA。
 - 服务器默认关闭，任何实际同步须得到项目负责人本次同意。
