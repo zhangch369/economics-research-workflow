@@ -36,7 +36,7 @@ def check(layout):
         return file,record
     def mirror(workspace):
         wanted={p.relative_to(workspace/'code').as_posix() for p in (workspace/'code').rglob('*') if p.is_dir() and '__pycache__' not in p.parts and not p.name.startswith('.')}
-        for layer in ['data_intermeidate','data_analysis']:
+        for layer in ['data_intermediate','data_analysis']:
             actual={p.relative_to(workspace/layer).as_posix() for p in (workspace/layer).rglob('*') if p.is_dir()}
             assert actual==wanted,(layer,actual^wanted)
     _,base=last(ROOT,'demo');assert base['qa_status']=='PASS'
@@ -64,7 +64,7 @@ def check(layout):
     checks.append({'check':'png_images_doc_regression_tables_and_no_txt_sidecars','status':'PASS'})
     checks.append({'check':'mirrored_data_directories_and_type_first_dated_artifacts','status':'PASS'})
     moved=work/'内部迁移副本'
-    shutil.copytree(ROOT,moved,ignore=shutil.ignore_patterns('outputs','releases','data_intermeidate','data_analysis','__pycache__','.git'))
+    shutil.copytree(ROOT,moved,ignore=shutil.ignore_patterns('outputs','releases','data_intermediate','data_analysis','__pycache__','.git'))
     _,moved_record=run(moved);assert moved_record['qa_status']=='PASS';mirror(moved)
     subprocess.run(['git','init','-q',str(moved)],check=True)
     for rel,wanted in [('data_raw/private_input.csv',0),(str(Path(moved_record['artifacts']['PANEL_FILE']).relative_to(moved)),0),(str(Path(moved_record['artifacts']['ANALYSIS_FILE']).relative_to(moved)),1)]:

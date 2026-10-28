@@ -44,7 +44,7 @@ def main():
     task = tasks[args.task]
     profile = json.loads(resolve(ROOT,args.profile).read_text())
     roots = {k:resolve(ROOT,profile.get(field,default)) for k,field,default in [
-        ('raw','data_raw_root','data_raw'), ('intermediate','data_intermediate_root','data_intermeidate'),
+        ('raw','data_raw_root','data_raw'), ('intermediate','data_intermediate_root','data_intermediate'),
         ('analysis','data_analysis_root','data_analysis')]}
     reserved=set()
     for spec in task.get('artifacts',{}).values():

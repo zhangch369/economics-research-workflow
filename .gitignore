@@ -5,7 +5,7 @@ __pycache__/
 *.env
 /data_raw/*
 !/data_raw/demo/
-/data_intermeidate/
+/data_intermediate/
 /config/machine.local.json
 /config/server.local.json
 /outputs/

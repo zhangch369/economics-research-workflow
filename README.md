@@ -13,7 +13,7 @@
 项目根目录/
 ├── code/                    00_setup；01_data_preparation；02_main_regressions；03_robustness；04_mechanisms；05_extensions；90_qa
 ├── data_raw/                来源原件，不入Git
-├── data_intermeidate/       目录逐级镜像code，不入Git
+├── data_intermediate/       目录逐级镜像code，不入Git
 ├── data_analysis/           目录逐级镜像code，纳入Git
 ├── outputs/                 tables、figures、logs、estimates、samples、qa、provenance、runs
 ├── config/                  任务、机器与服务器配置
@@ -34,7 +34,7 @@
 
 数据目录逐级对应实际code目录，新增专题/研究线要一起镜像；同一数据由生产代码所在模块归档，下游显式引用，不到处复制。分类见[DATA_LAYOUT](management/DATA_LAYOUT.md)。
 
-示例：`data_intermeidate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta`。
+示例：`data_intermediate/01_data_preparation/01_clean/firm_year_panel_demo_20261027_v01.dta`；`data_analysis/01_data_preparation/02_build/firm_year_analysis_demo_20261027_v01.dta`。
 
 outputs先按用途分类，再按模块：表格在`outputs/tables/02_main_regressions/`，图在figures，日志在logs；不再用日期或随机后缀文件夹作为主要分类。文件直接标日期和版次，例如`main_table_demo_20261027_v01.doc`。同日重复运行自动递增为v02、v03；--date和--edition可明确指定，已有版次不覆盖。包内已有同名分析文件时，也自动避开该版次。
 
@@ -77,7 +77,7 @@ The demonstration requires Python 3.9+, Stata 18, and the Stata packages `reghdf
 | --- | --- |
 | `code/` | Numbered Stata production stages; `90_qa/` contains internal checks |
 | `config/` | Task definitions and machine/server configuration examples |
-| `data_raw/`, `data_intermeidate/`, `data_analysis/` | Raw, intermediate, and analysis data; `data_intermeidate` retains the template's existing spelling |
+| `data_raw/`, `data_intermediate/`, `data_analysis/` | Raw, intermediate, and analysis data |
 | `outputs/` | Type-first tables, figures, logs, estimates, samples, checks, provenance, and readable run records |
 | `management/` | Project status, data and specification registries, task cards, and workflow rules |
 | `research_notes/`, `ai_records/` | Research notes and important AI session handoffs |

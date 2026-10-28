@@ -47,7 +47,7 @@ def main():
             z.writestr(f'economics_workspace/EXPORT_MANIFEST_{layout.version}.json',json.dumps({'scope':config['scope'],'version':layout.version,'internal_qa_included':False,'source_files':manifest},ensure_ascii=False,indent=2))
             for rel in code_directories(ROOT):
                 if '90_qa' in rel.parts:continue
-                for layer in ('data_intermeidate','data_analysis'):
+                for layer in ('data_intermediate','data_analysis'):
                     z.writestr(f'economics_workspace/{layer}/{rel.as_posix()}/','')
             for category in CATEGORIES:
                 z.writestr(f'economics_workspace/outputs/{category}/','')

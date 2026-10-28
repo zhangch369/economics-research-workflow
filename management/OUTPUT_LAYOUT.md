@@ -28,7 +28,7 @@ run.py、export_replication.py和server_sync.py默认使用北京时间当天日
 
 ## 数据与清理
 
-数据分类见DATA_LAYOUT.md：data_intermeidate和data_analysis逐级镜像code，不按运行时间建目录。每个数据文件同样带日期和版次。
+数据分类见DATA_LAYOUT.md：data_intermediate和data_analysis逐级镜像code，不按运行时间建目录。每个数据文件同样带日期和版次。
 
 每次任务结束与每周检查：列出确认无用的临时txt、废弃输出、未被保留版本引用的重复产物，写明具体路径、理由、可回收空间（有实测时）和是否已经获准删除。根据内容区分历史正式表格txt与临时txt；正式表图、有效日志、实际样本与复现来源不能仅因扩展名或旧日期被清理。已确认不需要的具体文件按用户授权清理，并保留清单；尚未确认的候选先提醒。
 
